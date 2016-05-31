@@ -1,0 +1,40 @@
+{
+  "title": "RollbarDotNet",
+  "copyright": "William Roush 20016",
+  "description": "Rollbar Integration for .NET Core",
+  "authors": [
+    "William Roush"
+  ],
+  "packOptions": {
+    "projectUrl": "https://github.com/RoushTech/RollbarDotNet",
+    "licenseUrl": "https://github.com/RoushTech/RollbarDotNet/blob/master/src/RollbarDotNet/LICENSE",
+    "tags": [
+      "Rollbar"
+    ]
+  },
+  "version": "0.1.0-*",
+
+  "dependencies": {
+    "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
+    "Newtonsoft.Json": "8.0.3",
+    "System.Diagnostics.FileVersionInfo": "4.0.0-rc2-24027"
+  },
+  "frameworks": {
+    "netstandard1.5": {
+      "buildOptions": {
+        "define": [
+          "DOTNET"
+        ]
+      },
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.AspNetCore.Http.Abstractions": "1.0.0-rc2-final",
+        "System.Runtime": "4.1.0-rc2-24027",
+        "System.Net.Http": "4.0.1-rc2-24027"
+      }
+    }
+  }
+}
