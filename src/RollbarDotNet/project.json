@@ -7,7 +7,7 @@
   ],
   "packOptions": {
     "projectUrl": "https://github.com/RoushTech/RollbarDotNet",
-    "licenseUrl": "https://github.com/RoushTech/RollbarDotNet/blob/master/src/RollbarDotNet/LICENSE",
+    "licenseUrl": "https://github.com/RoushTech/RollbarDotNet/blob/master/LICENSE.txt",
     "tags": [
       "Rollbar"
     ]
