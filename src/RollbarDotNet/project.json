@@ -1,6 +1,6 @@
 {
   "title": "RollbarDotNet",
-  "copyright": "William Roush 20016",
+  "copyright": "William Roush 2016",
   "description": "Rollbar Integration for .NET Core",
   "authors": [
     "William Roush"
