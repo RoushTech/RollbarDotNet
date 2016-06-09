@@ -7,11 +7,5 @@
     {
         [JsonProperty("body")]
         public string Body { get; set; }
-
-        [JsonProperty("route")]
-        public string Route { get; set; }
-
-        [JsonProperty("time_elapsed")]
-        public decimal TimeElapsed { get; set; }
     }
 }

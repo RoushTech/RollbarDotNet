@@ -17,7 +17,6 @@
         public static IServiceCollection AddRollbarWeb(this IServiceCollection services)
         {
             AddRollbar(services);
-            services.AddScoped<IBuilder, ClientBuilder>();
             services.AddSingleton<IBuilder, ServerBuilder>();
             services.AddScoped<IBuilder, RequestBuilder>();
             return services;
