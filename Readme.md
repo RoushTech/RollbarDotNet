@@ -34,6 +34,21 @@ services.AddRollbar();
 services.AddSingleton(Configuration); // Add IConfigurationRoot service.
 ```
 
+## Getting Occurrence UUIDs
+
+Getting the occurrence UUID is easy, just get it from the HttpContext Feature collection:
+
+``` csharp
+public IActionResult Error()
+{
+    var response = HttpContext.Features.Get<IRollbarResponseFeature>();
+    return Content(response.Uuid);
+}
+```
+
+The UUID can be looked up directly via https://rollbar.com/occurrence/uuid/?uuid=[UUID HERE]. This may be really useful if you want to let your users report errors to you, you can include this UUID automatically in the report.
+
+You can check if Rollbar has reported the exception via the IRollbarResponseFeature.Handled boolean.
 
 # Calling Directly
 
