@@ -24,12 +24,14 @@ Place the following in your Startup.ConfigureServices section:
 
 ``` csharp
 services.AddRollbarWeb();
+services.AddSingleton(Configuration); // Add IConfigurationRoot service.
 ```
 
 There is also one that doesn't load the builders for building out environment information for web servers (this will not attempt to crawl for server/client/request information):
 
 ``` csharp
 services.AddRollbar();
+services.AddSingleton(Configuration); // Add IConfigurationRoot service.
 ```
 
 
