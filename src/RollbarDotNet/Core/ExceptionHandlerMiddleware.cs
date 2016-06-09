@@ -28,6 +28,12 @@ namespace RollbarDotNet.Core
             catch(Exception exception)
             {
                 var response = await this.Rollbar.SendException(exception);
+                var rollbarResponseFeature = new RollbarResponseFeature
+                {
+                    Handled = true,
+                    Uuid = response.Result.Uuid
+                };
+                context.Features.Set<IRollbarResponseFeature>(rollbarResponseFeature);
 
                 // Continue throwing up the stack, we just log, let someone else handle.
                 throw;

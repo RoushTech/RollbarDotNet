@@ -24,14 +24,31 @@ Place the following in your Startup.ConfigureServices section:
 
 ``` csharp
 services.AddRollbarWeb();
+services.AddSingleton(Configuration); // Add IConfigurationRoot service.
 ```
 
 There is also one that doesn't load the builders for building out environment information for web servers (this will not attempt to crawl for server/client/request information):
 
 ``` csharp
 services.AddRollbar();
+services.AddSingleton(Configuration); // Add IConfigurationRoot service.
 ```
 
+## Getting Occurrence UUIDs
+
+Getting the occurrence UUID is easy, just get it from the HttpContext Feature collection:
+
+``` csharp
+public IActionResult Error()
+{
+    var response = HttpContext.Features.Get<IRollbarResponseFeature>();
+    return Content(response.Uuid);
+}
+```
+
+The UUID can be looked up directly via https://rollbar.com/occurrence/uuid/?uuid=[UUID HERE]. This may be really useful if you want to let your users report errors to you, you can include this UUID automatically in the report.
+
+You can check if Rollbar has reported the exception via the IRollbarResponseFeature.Handled boolean.
 
 # Calling Directly
 

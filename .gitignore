@@ -1,3 +1,4 @@
 src/RollbarDotNet/obj/
 src/RollbarDotNet/bin/
 .vs/
+*.lock.json
