@@ -9,18 +9,23 @@
     "projectUrl": "https://github.com/RoushTech/RollbarDotNet",
     "licenseUrl": "https://github.com/RoushTech/RollbarDotNet/blob/master/LICENSE.txt",
     "tags": [
-      "Rollbar"
+      "Rollbar",
+      "dotnet",
+      "Core",
+      "Error"
     ]
   },
-  "version": "0.2.0-*",
-
+  "version": "0.3.0-*",
   "dependencies": {
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc2-final",
     "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
     "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-rc2-final",
     "Newtonsoft.Json": "8.0.3",
-    "System.Diagnostics.FileVersionInfo": "4.0.0-rc2-24027"
+    "System.Diagnostics.FileVersionInfo": "4.0.0-rc2-24027",
+    "System.Text.RegularExpressions": "4.0.12-rc2-24027"
   },
   "frameworks": {
     "netstandard1.5": {

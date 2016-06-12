@@ -7,7 +7,7 @@
     {
         public void Execute(Payload payload, System.Exception exception)
         {
-            payload.Data.Body.Trace = new Payloads.Trace();
+            payload.Data.Body.Trace = new Trace();
             this.BuildException(payload.Data.Body.Trace.Exception, exception);
             this.BuildFrames(payload.Data.Body.Trace.Frames, exception);
         }

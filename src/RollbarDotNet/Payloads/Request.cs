@@ -12,6 +12,9 @@
         [JsonProperty("method")]
         public string Method { get; set; }
 
+        [JsonProperty("cookies")]
+        public Dictionary<string, string> Cookies { get; set; }
+
         [JsonProperty("headers")]
         public Dictionary<string, string> Headers { get; set; }
 
