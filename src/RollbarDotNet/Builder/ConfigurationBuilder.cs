@@ -3,6 +3,7 @@
     using Microsoft.Extensions.Configuration;
     using Payloads;
     using System;
+
     public class ConfigurationBuilder : IBuilder
     {
         public ConfigurationBuilder(IConfigurationRoot configuration)

@@ -47,6 +47,18 @@
         }
 
         [Fact]
+        public void Builds_Payload_Cookies()
+        {
+            var query = this.GeneratePayload()?.Data?.Request?.Cookies;
+            Assert.Equal(
+                new Dictionary<string, string>
+                {
+                    { "test", "test" }
+                },
+                query);
+        }
+
+        [Fact]
         public void Builds_Payload_Query_Get()
         {
             var query = this.GeneratePayload()?.Data?.Request?.Get;
@@ -88,6 +100,7 @@
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Headers).Returns(this.GenerateHeaderDictionary);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Query).Returns(this.GenerateQueryCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Form).Returns(this.GenerateFormCollection);
+            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Cookies).Returns(this.GenerateCookieCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.QueryString).Returns(new QueryString("?query=test&string=here"));
 
             var requestBuilder = new RequestBuilder(httpContextAccessorMock.Object);
@@ -101,15 +114,23 @@
             var headerDictionaryMock = new Mock<IHeaderDictionary>();
             headerDictionaryMock
                 .Setup(h => h.GetEnumerator())
-                .Returns(this.GenerateEnumerator());
+                .Returns(this.GenerateStringValueEnumerator());
             return headerDictionaryMock.Object;
+        }
+
+        protected IRequestCookieCollection GenerateCookieCollection()
+        {
+            var cookieCollectionMock = new Mock<IRequestCookieCollection>();
+            cookieCollectionMock.Setup(h => h.GetEnumerator())
+                .Returns(this.GenerateStringEnumerator());
+            return cookieCollectionMock.Object;
         }
 
         protected IQueryCollection GenerateQueryCollection()
         {
             var queryCollectionMock = new Mock<IQueryCollection>();
             queryCollectionMock.Setup(h => h.GetEnumerator())
-                .Returns(this.GenerateEnumerator());
+                .Returns(this.GenerateStringValueEnumerator());
             return queryCollectionMock.Object;
         }
 
@@ -117,11 +138,19 @@
         {
             var formCollectionMock = new Mock<IFormCollection>();
             formCollectionMock.Setup(h => h.GetEnumerator())
-                .Returns(this.GenerateEnumerator());
+                .Returns(this.GenerateStringValueEnumerator());
             return formCollectionMock.Object;
         }
 
-        protected IEnumerator<KeyValuePair<string, StringValues>> GenerateEnumerator()
+        protected IEnumerator<KeyValuePair<string, string>> GenerateStringEnumerator()
+        {
+            return new Dictionary<string, string>
+            {
+                { "test", "test" }
+            }.GetEnumerator();
+        }
+
+        protected IEnumerator<KeyValuePair<string, StringValues>> GenerateStringValueEnumerator()
         {
             return new Dictionary<string, StringValues>
             {
