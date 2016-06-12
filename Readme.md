@@ -23,15 +23,24 @@ app.UseRollbarExceptionHandler();
 Place the following in your Startup.ConfigureServices section:
 
 ``` csharp
-services.AddRollbarWeb();
+services.AddRollbarWeb(Configuration);
 services.AddSingleton(Configuration); // Add IConfigurationRoot service.
 ```
 
 There is also one that doesn't load the builders for building out environment information for web servers (this will not attempt to crawl for server/client/request information):
 
 ``` csharp
-services.AddRollbar();
+services.AddRollbar(Configuration);
 services.AddSingleton(Configuration); // Add IConfigurationRoot service.
+```
+
+Configure Rollbar from your appSettings.json file like so:
+
+``` javascript
+  "Rollbar": {
+    "AccessToken": "[access token here]",
+    "Environment": "[named environment here]"
+  }
 ```
 
 ## Getting Occurrence UUIDs
@@ -64,10 +73,28 @@ response.Uuid //Event UUID that can be looked up on the rollbar site.
 var response = await this.Rollbar.SendMessage("Hello World!", RollbarLevels.Message);
 ```
 
+# Blacklists
 
+Blacklisting will replace variables with asterisks ("**********") when data is sent to Rollbar.
 
-# Building your own builders
+Inside of your appSettings.json you have two options, using plaintext or regular expressions:
 
+``` javascript
+  "Rollbar": {
+    "AccessToken": "[access token here]",
+    "Environment": "[named environment here]",
+    "Blacklist": {
+      "Regex": [
+        "^CreditCard.*$"
+      ],
+      "Text": [
+        "Password"
+      ]
+    }
+  }
+```
+
+Additional Blacklists can be coded by inheriting from the RollbarDotNet.Blacklisters.IBlacklister interface and registering it with your application's dependency injection framework. 
 
 
 ## To do

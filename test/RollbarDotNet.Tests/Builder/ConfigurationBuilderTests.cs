@@ -15,7 +15,7 @@
         public void Require_Access_Token()
         {
             var configurationMock = new Mock<IConfigurationRoot>();
-            var configurationBuilder = new ConfigurationBuilder(configurationMock.Object);
+            var configurationBuilder = new RollbarDotNet.Builder.ConfigurationBuilder(configurationMock.Object);
             var exception = Assert.Throws<InvalidOperationException>(() => configurationBuilder.Execute(new Payloads.Payload()));
             Assert.Equal("Configuration variable Rollbar:AccessToken must be set.", exception.Message);
         }
@@ -25,7 +25,7 @@
         {
             var configurationMock = new Mock<IConfigurationRoot>();
             configurationMock.Setup(c => c["Rollbar:AccessToken"]).Returns(ACCESSTOKEN);
-            var configurationBuilder = new ConfigurationBuilder(configurationMock.Object);
+            var configurationBuilder = new RollbarDotNet.Builder.ConfigurationBuilder(configurationMock.Object);
             var exception = Assert.Throws<InvalidOperationException>(() => configurationBuilder.Execute(new Payloads.Payload()));
             Assert.Equal("Configuration variable Rollbar:Environment must be set.", exception.Message);
         }
@@ -36,7 +36,7 @@
             var configurationMock = new Mock<IConfigurationRoot>();
             configurationMock.Setup(c => c["Rollbar:AccessToken"]).Returns(ACCESSTOKEN);
             configurationMock.Setup(c => c["Rollbar:Environment"]).Returns(ENVIRONMENT);
-            var configurationBuilder = new ConfigurationBuilder(configurationMock.Object);
+            var configurationBuilder = new RollbarDotNet.Builder.ConfigurationBuilder(configurationMock.Object);
             var payload = new Payloads.Payload();
             configurationBuilder.Execute(payload);
             Assert.Equal(ACCESSTOKEN, payload.AccessToken);
