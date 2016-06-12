@@ -28,6 +28,7 @@
             request.Method = context.Request.Method.ToUpper();
             request.Headers = this.HeadersToDictionary(context.Request.Headers);
             request.UserIp = context.Features.Get<IHttpConnectionFeature>().RemoteIpAddress.ToString();
+            request.Cookies = this.CookiesToDictionary(context.Request.Cookies);
 
             if (context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
             {
@@ -40,6 +41,17 @@
 
             if (context.Request.QueryString.HasValue)
                 request.QueryString = context.Request.QueryString.Value;
+        }
+
+        protected Dictionary<string, string> CookiesToDictionary(IRequestCookieCollection cookieCollection)
+        {
+            var dictionary = new Dictionary<string, string>();
+            foreach (var cookie in cookieCollection)
+            {
+                dictionary.Add(cookie.Key, cookie.Value);
+            }
+
+            return dictionary.Count == 0 ? null : dictionary;
         }
 
         protected Dictionary<string, string> FormToDictionary(IFormCollection formCollection)
