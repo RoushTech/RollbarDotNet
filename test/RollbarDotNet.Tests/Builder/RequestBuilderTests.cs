@@ -7,12 +7,17 @@
     using Payloads;
     using RollbarDotNet.Builder;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
     using Xunit;
 
     public class RequestBuilderTests
     {
+        protected Dictionary<string, string> DefaultDictionary = new Dictionary<string, string>
+        {
+            { "blacklist", "test" },
+            { "test", "test" }
+        };
+
         [Fact]
         public void Builds_Payload_Url()
         {
@@ -31,12 +36,15 @@
         public void Builds_Payload_Headers()
         {
             var headers = this.GeneratePayload()?.Data?.Request?.Headers;
-            Assert.Equal(
-                new Dictionary<string, string>
-                {
-                    { "test", "test" }
-                },
-                headers);
+            Assert.Equal(this.DefaultDictionary, headers);
+        }
+
+        [Fact]
+        public void Blacklists_Payload_Headers()
+        {
+            var headers = this.GeneratePayload(enableBlacklist: true)?.Data?.Request?.Headers;
+            Assert.True(headers.ContainsKey("blacklist"));
+            Assert.Equal("**********", headers["blacklist"]);
         }
 
         [Fact]
@@ -50,46 +58,62 @@
         public void Builds_Payload_Cookies()
         {
             var query = this.GeneratePayload()?.Data?.Request?.Cookies;
-            Assert.Equal(
-                new Dictionary<string, string>
-                {
-                    { "test", "test" }
-                },
-                query);
+            Assert.Equal(this.DefaultDictionary, query);
+        }
+
+        [Fact]
+        public void Blacklists_Payload_Cookies()
+        {
+            var cookies = this.GeneratePayload(enableBlacklist: true)?.Data?.Request?.Cookies;
+            Assert.True(cookies.ContainsKey("blacklist"));
+            Assert.Equal("**********", cookies["blacklist"]);
         }
 
         [Fact]
         public void Builds_Payload_Query_Get()
         {
             var query = this.GeneratePayload()?.Data?.Request?.Get;
-            Assert.Equal(
-                new Dictionary<string, string>
-                {
-                    { "test", "test" }
-                },
-                query);
+            Assert.Equal(this.DefaultDictionary, query);
+        }
+
+        [Fact]
+        public void Blacklists_Payload_Query_Get()
+        {
+            var query = this.GeneratePayload(enableBlacklist: true)?.Data?.Request?.Get;
+            Assert.True(query.ContainsKey("blacklist"));
+            Assert.Equal("**********", query["blacklist"]);
         }
 
         [Fact]
         public void Builds_Payload_Query_Post()
         {
-            var query = this.GeneratePayload("POST")?.Data?.Request?.Post;
-            Assert.Equal(
-                new Dictionary<string, string>
-                {
-                    { "test", "test" }
-                },
-                query);
+            var query = this.GeneratePayload(false, "POST")?.Data?.Request?.Post;
+            Assert.Equal(this.DefaultDictionary, query);
+        }
+
+        [Fact]
+        public void Blacklists_Payload_Query_Post()
+        {
+            var query = this.GeneratePayload(enableBlacklist: true, method: "POST")?.Data?.Request?.Post;
+            Assert.True(query.ContainsKey("blacklist"));
+            Assert.Equal("**********", query["blacklist"]);
         }
 
         [Fact]
         public void Builds_Payload_QueryString()
         {
             var queryString = this.GeneratePayload()?.Data?.Request?.QueryString;
-            Assert.Equal("?query=test&string=here", queryString);
+            Assert.Equal("?query=test&blacklist=here", queryString);
         }
 
-        protected Payload GeneratePayload(string method = "GET")
+        [Fact]
+        public void Blacklists_Payload_QueryString()
+        {
+            var queryString = this.GeneratePayload(enableBlacklist: true)?.Data?.Request?.QueryString;
+            Assert.Equal("?query=test&blacklist=**********", queryString);
+        }
+
+        protected Payload GeneratePayload(bool enableBlacklist = false, string method = "GET")
         {
             var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Scheme).Returns("http");
@@ -101,9 +125,13 @@
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Query).Returns(this.GenerateQueryCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Form).Returns(this.GenerateFormCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Cookies).Returns(this.GenerateCookieCollection);
-            httpContextAccessorMock.Setup(h => h.HttpContext.Request.QueryString).Returns(new QueryString("?query=test&string=here"));
+            httpContextAccessorMock.Setup(h => h.HttpContext.Request.QueryString).Returns(new QueryString("?query=test&blacklist=here"));
 
-            var requestBuilder = new RequestBuilder(httpContextAccessorMock.Object);
+            var blacklistCollectionMock = new Mock<IBlacklistCollection>();
+            blacklistCollectionMock.Setup(b => b.Check("test")).Returns(false);
+            blacklistCollectionMock.Setup(b => b.Check("blacklist")).Returns(enableBlacklist);
+
+            var requestBuilder = new RequestBuilder(blacklistCollectionMock.Object, httpContextAccessorMock.Object);
             var payload = new Payload();
             requestBuilder.Execute(payload);
             return payload;
@@ -146,6 +174,7 @@
         {
             return new Dictionary<string, string>
             {
+                { "blacklist", "test" },
                 { "test", "test" }
             }.GetEnumerator();
         }
@@ -154,7 +183,8 @@
         {
             return new Dictionary<string, StringValues>
             {
-                { "test", new StringValues("test") }
+                { "blacklist", "test" },
+                { "test", "test" }
             }.GetEnumerator();
         }
     }
