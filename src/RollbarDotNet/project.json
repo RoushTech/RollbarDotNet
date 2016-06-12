@@ -9,11 +9,13 @@
     "projectUrl": "https://github.com/RoushTech/RollbarDotNet",
     "licenseUrl": "https://github.com/RoushTech/RollbarDotNet/blob/master/LICENSE.txt",
     "tags": [
-      "Rollbar"
+      "Rollbar",
+      "dotnet",
+      "Core",
+      "Error"
     ]
   },
-  "version": "0.2.0-*",
-
+  "version": "0.3.0-*",
   "dependencies": {
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc2-final",

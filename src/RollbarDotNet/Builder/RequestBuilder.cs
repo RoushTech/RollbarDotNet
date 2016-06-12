@@ -40,7 +40,6 @@
 
             if (context.Request.QueryString.HasValue)
                 request.QueryString = context.Request.QueryString.Value;
-            
         }
 
         protected Dictionary<string, string> FormToDictionary(IFormCollection formCollection)

@@ -2,3 +2,5 @@ src/RollbarDotNet/obj/
 src/RollbarDotNet/bin/
 .vs/
 *.lock.json
+test/RollbarDotNet.Tests/bin/
+test/RollbarDotNet.Tests/obj/
