@@ -1,15 +1,21 @@
 ﻿namespace RollbarDotNet.Builder
 {
-    using System;
+    using Abstractions;
     using Microsoft.AspNetCore.Hosting;
     using Payloads;
+    using System;
 
     public class ServerBuilder : IBuilder
     {
-        public ServerBuilder(IHostingEnvironment hostingEnvironment)
+        public ServerBuilder(
+            IEnvironment environment,
+            IHostingEnvironment hostingEnvironment)
         {
+            this.Environment = environment;
             this.HostingEnvironment = hostingEnvironment;
         }
+
+        protected IEnvironment Environment { get; set; }
 
         protected IHostingEnvironment HostingEnvironment { get; set; }
 
@@ -21,7 +27,7 @@
 
         private void BuildServer(Server server)
         {
-            server.Host = Environment.MachineName;
+            server.Host = this.Environment.MachineName;
             server.Root = this.HostingEnvironment.WebRootPath;
         }
     }
