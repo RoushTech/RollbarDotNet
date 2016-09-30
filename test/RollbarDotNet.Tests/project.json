@@ -1,25 +1,24 @@
 {
-  "version": "0.3.0-*",
+  "version": "0.4.0",
   "dependencies": {
-    "RollbarDotNet": "0.3.0-*",
-    "Moq": "4.6.25-alpha",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Microsoft.NETCore.App": "1.0.0",
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0",
+      "type": "platform"
+    },
+    "RollbarDotNet": "0.4.0-*",
+    "Moq": "4.6.38-alpha",
     "NETStandard.Library": "1.6.0",
     "System.Diagnostics.TraceSource": "4.0.0",
-    "xunit": "2.2.0-beta2-build3300"
+    "xunit": "2.1.0",
+    "xunit.runner.console": "2.1.0",
+    "xunit.runner.visualstudio": "2.1.0",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029"
   },
   "testRunner": "xunit",
   "frameworks": {
     "netcoreapp1.0": {
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "type": "platform",
-          "version": "1.0.0"
-        }
-      },
       "imports": [
-        "dnxcore50",
+        "dotnet5.6",
         "portable-net45+win81"
       ]
     }

@@ -15,7 +15,7 @@
       "Error"
     ]
   },
-  "version": "0.4.0-*",
+  "version": "0.4.0",
   "dependencies": {
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
     "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
@@ -34,7 +34,7 @@
           "DOTNET"
         ]
       },
-      "imports": "dnxcore50",
+      "imports": "dotnet5.6",
       "dependencies": {
         "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
         "System.Net.Http": "4.1.0"
