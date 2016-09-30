@@ -15,17 +15,17 @@
       "Error"
     ]
   },
-  "version": "0.3.0-*",
+  "version": "0.4.0",
   "dependencies": {
-    "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc2-final",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-rc2-final",
-    "Newtonsoft.Json": "8.0.3",
-    "System.Diagnostics.FileVersionInfo": "4.0.0-rc2-24027",
-    "System.Text.RegularExpressions": "4.0.12-rc2-24027"
+    "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
+    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0",
+    "Microsoft.Extensions.Options": "1.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
+    "Newtonsoft.Json": "9.0.1",
+    "System.Diagnostics.FileVersionInfo": "4.0.0",
+    "System.Runtime": "4.1.0",
+    "System.Text.RegularExpressions": "4.1.0"
   },
   "frameworks": {
     "netstandard1.5": {
@@ -34,11 +34,10 @@
           "DOTNET"
         ]
       },
-      "imports": "dnxcore50",
+      "imports": "dotnet5.6",
       "dependencies": {
-        "Microsoft.AspNetCore.Http.Abstractions": "1.0.0-rc2-final",
-        "System.Runtime": "4.1.0-rc2-24027",
-        "System.Net.Http": "4.0.1-rc2-24027"
+        "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
+        "System.Net.Http": "4.1.0"
       }
     }
   }
