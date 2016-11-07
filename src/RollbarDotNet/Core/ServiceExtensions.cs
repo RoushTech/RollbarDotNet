@@ -27,7 +27,8 @@
         {
             return AddRollbar(services, configuration)
                 .AddSingleton<IBuilder, ServerBuilder>()
-                .AddScoped<IBuilder, RequestBuilder>();
+                .AddScoped<IBuilder, RequestBuilder>()
+                .AddScoped<IBuilder, PersonBuilder>();
         }
     }
 }
