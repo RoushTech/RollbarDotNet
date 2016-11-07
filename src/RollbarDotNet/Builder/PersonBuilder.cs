@@ -22,6 +22,11 @@ namespace RollbarDotNet.Builder
         private void BuildPerson(Person person)
         {
             var principal = contextAccessor.HttpContext.User;
+            if (principal == null)
+            {
+                return;
+            }
+
             person.Username = principal.Identity.Name;
             person.Email = principal.FindFirst(claim => claim.Type == ClaimTypes.Email)?.Value;
             person.Id = principal.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
