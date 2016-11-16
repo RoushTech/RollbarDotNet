@@ -39,18 +39,15 @@
 
         protected ConfigurationBlacklister Setup()
         {
-            var configurationBlacklistMock = new Mock<IOptions<BlacklistConfiguration>>();
-            var blacklistConfigurationMock = new Mock<BlacklistConfiguration>();
-            blacklistConfigurationMock.Setup(c => c.Text).Returns(new List<string>()
+            var configurationBlacklistMock = new Mock<IOptions<RollbarOptions>>();
+            configurationBlacklistMock.Setup(c => c.Value).Returns(new RollbarOptions
             {
-                "test",
+                Blacklist = new BlacklistConfiguration
+                {
+                    Regex = new List<string> { "^rege.$" },
+                    Text = new List<string> { "test" }
+                }
             });
-            blacklistConfigurationMock.Setup(c => c.Regex).Returns(new List<string>()
-            {
-                "^rege.$"
-            });
-
-            configurationBlacklistMock.Setup(c => c.Value).Returns(blacklistConfigurationMock.Object);
             return new ConfigurationBlacklister(configurationBlacklistMock.Object);
         }
     }

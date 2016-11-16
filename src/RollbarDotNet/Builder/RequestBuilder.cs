@@ -29,6 +29,11 @@
         protected void BuildRequest(Request request)
         {
             var context = this.contextAccessor.HttpContext;
+            if(context == null)
+            {
+                return;
+            }
+
             request.Url = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.Path}";
             request.Method = context.Request.Method.ToUpper();
             request.Headers = this.HeadersToDictionary(context.Request.Headers);
