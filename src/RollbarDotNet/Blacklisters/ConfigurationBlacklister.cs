@@ -8,9 +8,9 @@
 
     public class ConfigurationBlacklister : IBlacklister
     {
-        public ConfigurationBlacklister(IOptions<BlacklistConfiguration> config)
+        public ConfigurationBlacklister(IOptions<RollbarOptions> config)
         {
-            this.Configuration = config?.Value;
+            this.Configuration = config?.Value?.Blacklist;
             this.RegexChecks = new List<Regex>();
             this.StringChecks = new List<string>();
             if (this.Configuration != null)
