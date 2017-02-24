@@ -32,7 +32,6 @@
                 .AddSingleton<IBuilder, ServerBuilder>()
                 .AddScoped<IBuilder, RequestBuilder>()
                 .AddScoped<IBuilder, PersonBuilder>();
-
         }
     }
 }

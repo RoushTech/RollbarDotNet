@@ -21,7 +21,7 @@ namespace RollbarDotNet.Builder
 
         private void BuildPerson(Person person)
         {
-            var principal = contextAccessor.HttpContext.User;
+            var principal = contextAccessor.HttpContext?.User;
             if (principal == null)
             {
                 return;
