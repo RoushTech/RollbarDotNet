@@ -30,8 +30,8 @@
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             return services.AddRollbar()
                 .AddSingleton<IBuilder, ServerBuilder>()
-                .AddScoped<IBuilder, RequestBuilder>();
-
+                .AddScoped<IBuilder, RequestBuilder>()
+                .AddScoped<IBuilder, PersonBuilder>();
         }
     }
 }
