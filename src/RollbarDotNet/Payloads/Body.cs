@@ -8,6 +8,7 @@
     {
         public Body()
         {
+            this.Message = new Message();
         }
 
         [JsonProperty("trace")]
