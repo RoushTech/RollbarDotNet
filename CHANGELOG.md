@@ -6,6 +6,14 @@
 - IHttpContextAccessor is no longer assumed to be included as part of `AddIdentity()`, we'll add it.
 - Testing of dependency injection for web platforms (console apps coming soon).
 - Switching to the use of `IOptions<RollbarOptions>` instead of `IConfigurationRoot`.
+- Testing for SendMessage calls.
+- Person record support (thank you mkdabrowski).
+- Exception builder is now injectable.
+
+## Bug Fixes
+
+- Sending a message to Rollbar no longer results in a null reference exception being thrown.
+
 
 # 0.4.0
 <sup>Released: 2016/9/30</sup>
