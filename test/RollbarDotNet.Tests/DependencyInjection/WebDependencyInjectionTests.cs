@@ -50,5 +50,17 @@
                 await Assert.ThrowsAsync<HttpRequestException>(async () => await this.Rollbar.SendException(exception));
             }
         }
+
+        [Fact]
+        public async Task SuccessfullyReportMessage()
+        {
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await this.Rollbar.SendMessage("Hello"));
+        }
+
+        [Fact]
+        public async Task SuccessfullyReportMessageWithLevel()
+        {
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await this.Rollbar.SendMessage(RollbarLevel.Debug, "Hello"));
+        }
     }
 }
