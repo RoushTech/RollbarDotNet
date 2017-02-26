@@ -3,12 +3,9 @@
     using Abstractions;
     using Blacklisters;
     using Builder;
-    using Configuration;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
-    using Microsoft.Extensions.Options;
 
     public static class ServiceExtensions
     {
@@ -22,6 +19,7 @@
                 .AddSingleton<IEnvironment, SystemEnvironment>()
                 .AddSingleton<IBlacklister, ConfigurationBlacklister>()
                 .AddSingleton<IBlacklistCollection, BlacklistCollection>()
+                .AddSingleton<IExceptionBuilder, ExceptionBuilder>()
                 .AddScoped<Rollbar>();
         }
 

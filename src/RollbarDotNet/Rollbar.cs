@@ -7,15 +7,20 @@
 
     public class Rollbar
     {
-        public Rollbar(IEnumerable<IBuilder> builders)
+        public Rollbar(IEnumerable<IBuilder> builders, 
+                       IEnumerable<IExceptionBuilder> exceptionBuilders)
         {
-            this.RollbarClient = new RollbarClient();
             this.Builders = builders;
+            this.ExceptionBuilders = exceptionBuilders;
+            this.RollbarClient = new RollbarClient();
         }
+
+        protected IEnumerable<IBuilder> Builders { get; set; }
+
+        protected IEnumerable<IExceptionBuilder> ExceptionBuilders { get; set; }
 
         protected RollbarClient RollbarClient { get; set; }
 
-        protected IEnumerable<IBuilder> Builders { get; set; }
 
         public async Task<Response> SendException(System.Exception exception)
         {
@@ -25,7 +30,11 @@
         public async Task<Response> SendException(RollbarLevel level, System.Exception exception)
         {
             var payload = this.SetupPayload(level);
-            new ExceptionBuilder().Execute(payload, exception);
+            foreach(var exceptionBuilder in this.ExceptionBuilders)
+            {
+                exceptionBuilder.Execute(payload, exception);
+            }
+
             return await this.RollbarClient.Send(payload);
         }
 
