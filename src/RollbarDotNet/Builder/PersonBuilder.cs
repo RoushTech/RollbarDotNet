@@ -1,9 +1,9 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using RollbarDotNet.Payloads;
-
-namespace RollbarDotNet.Builder
+﻿namespace RollbarDotNet.Builder
 {
+    using Microsoft.AspNetCore.Http;
+    using Payloads;
+    using System.Security.Claims;
+
     public class PersonBuilder : IBuilder
     {
         private readonly IHttpContextAccessor contextAccessor;
