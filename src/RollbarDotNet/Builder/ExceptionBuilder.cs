@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Payloads;
 
-    public class ExceptionBuilder
+    public class ExceptionBuilder : IExceptionBuilder
     {
         public void Execute(Payload payload, System.Exception exception)
         {
