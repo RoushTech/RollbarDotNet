@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RollbarDotNet.Core
+﻿namespace RollbarDotNet.Core
 {
     public class RollbarResponseFeature : IRollbarResponseFeature
     {

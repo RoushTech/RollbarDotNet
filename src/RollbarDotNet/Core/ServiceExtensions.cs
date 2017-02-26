@@ -3,13 +3,13 @@
     using Abstractions;
     using Blacklisters;
     using Builder;
-    using Configuration;
-    using Microsoft.Extensions.Configuration;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
 
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddRollbar(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddRollbar(this IServiceCollection services)
         {
             return services
                 .AddSingleton<IBuilder, Builder.ConfigurationBuilder>()
@@ -19,15 +19,17 @@
                 .AddSingleton<IEnvironment, SystemEnvironment>()
                 .AddSingleton<IBlacklister, ConfigurationBlacklister>()
                 .AddSingleton<IBlacklistCollection, BlacklistCollection>()
-                .Configure<BlacklistConfiguration>(configuration.GetSection("Rollbar:Blacklist"))
+                .AddSingleton<IExceptionBuilder, ExceptionBuilder>()
                 .AddScoped<Rollbar>();
         }
 
-        public static IServiceCollection AddRollbarWeb(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddRollbarWeb(this IServiceCollection services)
         {
-            return AddRollbar(services, configuration)
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            return services.AddRollbar()
                 .AddSingleton<IBuilder, ServerBuilder>()
-                .AddScoped<IBuilder, RequestBuilder>();
+                .AddScoped<IBuilder, RequestBuilder>()
+                .AddScoped<IBuilder, PersonBuilder>();
         }
     }
 }

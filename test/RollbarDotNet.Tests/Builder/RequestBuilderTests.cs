@@ -113,7 +113,7 @@
             Assert.Equal("?query=test&blacklist=**********", queryString);
         }
 
-        protected Payload GeneratePayload(bool enableBlacklist = false, string method = "GET")
+        public IHttpContextAccessor CreateIHttpContextAccessor(string method)
         {
             var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Scheme).Returns("http");
@@ -126,12 +126,17 @@
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Form).Returns(this.GenerateFormCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Cookies).Returns(this.GenerateCookieCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.QueryString).Returns(new QueryString("?query=test&blacklist=here"));
+            return httpContextAccessorMock.Object;
+        }
+
+        protected Payload GeneratePayload(bool enableBlacklist = false, string method = "GET")
+        {
 
             var blacklistCollectionMock = new Mock<IBlacklistCollection>();
             blacklistCollectionMock.Setup(b => b.Check("test")).Returns(false);
             blacklistCollectionMock.Setup(b => b.Check("blacklist")).Returns(enableBlacklist);
 
-            var requestBuilder = new RequestBuilder(blacklistCollectionMock.Object, httpContextAccessorMock.Object);
+            var requestBuilder = new RequestBuilder(blacklistCollectionMock.Object, this.CreateIHttpContextAccessor(method));
             var payload = new Payload();
             requestBuilder.Execute(payload);
             return payload;

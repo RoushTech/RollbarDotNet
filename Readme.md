@@ -24,14 +24,19 @@ Place the following in your Startup.ConfigureServices section:
 
 ``` csharp
 services.AddRollbarWeb(Configuration);
-services.AddSingleton(Configuration); // Add IConfigurationRoot service.
 ```
 
 There is also one that doesn't load the builders for building out environment information for web servers (this will not attempt to crawl for server/client/request information):
 
 ``` csharp
 services.AddRollbar(Configuration);
-services.AddSingleton(Configuration); // Add IConfigurationRoot service.
+```
+
+Hook up the rollar configuration using the following code:
+
+``` csharp
+services.AddOptions(); // Most apps already are using this, but just in case.
+services.Configure<RollbarOptions>(options => Configuration.GetSection("Rollbar").Bind(options));
 ```
 
 Configure Rollbar from your appSettings.json file like so:
@@ -71,6 +76,34 @@ response.Uuid //Event UUID that can be looked up on the rollbar site.
 
 // Send a message
 var response = await this.Rollbar.SendMessage("Hello World!", RollbarLevels.Message);
+```
+
+# Calling Without Dependency Injection
+
+Although I *highly recommend* using depdency injection, you can fairly easily configure Rollbar by hand:
+
+``` csharp
+var rollbarOptions = Options.Create(new RollbarOptions
+{
+    AccessToken = "token here",
+    Environment = "development"
+});
+var rollbar = new Rollbar(
+    new IBuilder[] {
+        new ConfigurationBuilder(rollbarOptions),
+        new EnvironmentBuilder(new SystemDateTime()), // SystemDateTime abstracts DateTime for mocking
+        new NotifierBuilder()
+    }
+);
+
+try
+{
+    throw new Exception("Testing");
+}
+catch(Exception exception)
+{
+    await rollbar.SendException(exception); //Err... everything is async, keep that in mind.
+}
 ```
 
 # Blacklists

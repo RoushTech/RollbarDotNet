@@ -6,6 +6,7 @@
     using System.Net.Http;
     using System.Net.Http.Headers;
     using Payloads;
+
     public class RollbarClient
     {
         public RollbarClient()
@@ -28,7 +29,7 @@
                 var response = await httpClient.PostAsync(this.RollbarUri, new JsonHttpContentSerializer(json));
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new System.Exception(response.ToString());
+                    throw new HttpRequestException(response.ToString());
                 }
                 else
                 {
