@@ -4,3 +4,4 @@ src/RollbarDotNet/bin/
 *.lock.json
 test/RollbarDotNet.Tests/bin/
 test/RollbarDotNet.Tests/obj/
+*.user
