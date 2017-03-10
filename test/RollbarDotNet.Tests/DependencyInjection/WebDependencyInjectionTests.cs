@@ -6,7 +6,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using System;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using Xunit;
 
@@ -19,10 +18,9 @@
             services.AddOptions()
                     .AddRollbarWeb()
                     .AddSingleton(mockHostingEnvironment.Object);
-
             services.Configure<RollbarOptions>(o =>
             {
-                o.AccessToken = "test";
+                o.AccessToken = Environment.GetEnvironmentVariable("ROLLBAR_TOKEN");
                 o.Environment = "Testing";
             });
 
@@ -46,21 +44,20 @@
             }
             catch(Exception exception)
             {
-                // We're expecting a 401 due to the bad access token, anything else means we failed to DI.
-                await Assert.ThrowsAsync<HttpRequestException>(async () => await this.Rollbar.SendException(exception));
+                await this.Rollbar.SendException(exception);
             }
         }
 
         [Fact]
         public async Task SuccessfullyReportMessage()
         {
-            await Assert.ThrowsAsync<HttpRequestException>(async () => await this.Rollbar.SendMessage("Hello"));
+            await this.Rollbar.SendMessage("Hello");
         }
 
         [Fact]
         public async Task SuccessfullyReportMessageWithLevel()
         {
-            await Assert.ThrowsAsync<HttpRequestException>(async () => await this.Rollbar.SendMessage(RollbarLevel.Debug, "Hello"));
+            await this.Rollbar.SendMessage(RollbarLevel.Debug, "Hello");
         }
     }
 }

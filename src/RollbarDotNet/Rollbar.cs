@@ -46,6 +46,7 @@
         public async Task<Response> SendMessage(RollbarLevel level, string message)
         {
             var payload = this.SetupPayload(level);
+            payload.Data.Body.Message = new Message();
             payload.Data.Body.Message.Body = message;
             return await this.RollbarClient.Send(payload);
         }
