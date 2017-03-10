@@ -4,6 +4,12 @@ Rollbar support for your .NET Core projects, relies on dependency injection and 
 
 Inspired by RollbarSharp, great library, just required too many tweaks to make play with .NET core well in my opinion.
 
+# Testing
+
+Environment variables for testing:
+
+ * ROLLBAR_TOKEN - Rollbar token for testing.
+
 # Required services
 
 Please make sure the following services are available for the various builder modules.
