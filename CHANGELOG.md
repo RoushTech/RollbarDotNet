@@ -1,5 +1,16 @@
-﻿# 0.5.0
-<sup>Released: TBD</sup>
+﻿# 0.5.1
+<sup>Released: 2017/3/10</sup>
+
+## Features
+
+ - More robust testing of sending exceptions to Rollbar (see readme.md for instructions on configuring token for testing).
+
+## Bug Fixes
+
+ - Fixed issue sending Rollbar exceptions.
+
+# 0.5.0
+<sup>Released: 2017/2/26</sup>
 
 ## Features
 
