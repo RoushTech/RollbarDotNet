@@ -3,7 +3,6 @@
 
 ## Features
 
- - Include symbols in package. #55
  - Updated documentation. #49
  - Can now disable Rollbar from configuration. #48
 
