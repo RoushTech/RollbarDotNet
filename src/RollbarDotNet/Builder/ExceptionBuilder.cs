@@ -7,22 +7,47 @@
     {
         public void Execute(Payload payload, System.Exception exception)
         {
+            if(payload == null)
+            {
+                throw new System.ArgumentNullException(nameof(payload));
+            }
+
+            if(exception == null)
+            {
+                throw new System.ArgumentNullException(nameof(exception));
+            }
+
             payload.Data.Body.Trace = new Trace();
-            this.BuildException(payload.Data.Body.Trace.Exception, exception);
-            this.BuildFrames(payload.Data.Body.Trace.Frames, exception);
+            payload.Data.Body.Trace.Exception = this.BuildException(exception);
+            payload.Data.Body.Trace.Frames = this.BuildFrames(exception);
+            this.BuildTraceList(exception, payload.Data.Body.TraceChain);
         }
 
-        private void BuildFrames(List<Frame> frames, System.Exception exception)
+        protected void BuildTraceList(System.Exception exception, List<Trace> traceList)
+        {
+            if(exception.InnerException != null)
+            {
+                var trace = new Trace();
+                trace.Exception = this.BuildException(exception.InnerException);
+                traceList.Add(trace);
+                this.BuildTraceList(exception.InnerException, traceList);
+            }
+        }
+
+        protected List<Frame> BuildFrames(System.Exception exception)
         {
             // Frames not supported by .NET Core yet
             // https://github.com/dotnet/corefx/issues/1797
+            return null;
         }
 
-        protected void BuildException(Exception payload, System.Exception exception)
+        protected Exception BuildException(System.Exception exception)
         {
-            payload.Class = exception.GetType().Name;
-            payload.Message = exception.Message;
-            payload.Description = exception.StackTrace;
+            var payloadException = new Exception();
+            payloadException.Class = exception.GetType().Name;
+            payloadException.Message = exception.Message;
+            payloadException.Description = exception.StackTrace;
+            return payloadException;
         }
     }
 }
