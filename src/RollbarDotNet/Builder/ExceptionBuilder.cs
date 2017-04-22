@@ -43,7 +43,7 @@
         {
             // Frames not supported by .NET Core yet
             // https://github.com/dotnet/corefx/issues/1797
-            return null;
+            return new List<Frame>();
         }
 
         protected Exception BuildException(System.Exception exception)
