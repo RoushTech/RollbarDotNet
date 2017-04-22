@@ -1,4 +1,17 @@
-﻿# 0.5.1
+﻿# 0.5.2
+<sup>Released: 2017/4/21</sup>
+
+## Features
+
+ - Include symbols in package. #55
+ - Updated documentation. #49
+ - Can now disable Rollbar from configuration. #48
+
+## Bug Fixes
+
+ - Fix issue with trying to access Request.Form variables during POSTs that may not actually support form variables. #54
+
+# 0.5.1
 <sup>Released: 2017/3/10</sup>
 
 ## Features

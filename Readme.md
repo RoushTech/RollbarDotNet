@@ -104,7 +104,11 @@ var rollbar = new Rollbar(
         new ConfigurationBuilder(rollbarOptions),
         new EnvironmentBuilder(new SystemDateTime()), // SystemDateTime abstracts DateTime for mocking
         new NotifierBuilder()
-    }
+    },
+	new IExceptionBuilder[] {
+		new ExceptionBuilder()
+	},
+	new RollBarClient(rollbarOptions)
 );
 
 try

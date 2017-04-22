@@ -8,11 +8,12 @@
     public class Rollbar
     {
         public Rollbar(IEnumerable<IBuilder> builders, 
-                       IEnumerable<IExceptionBuilder> exceptionBuilders)
+                       IEnumerable<IExceptionBuilder> exceptionBuilders,
+                       RollbarClient rollbarClient)
         {
             this.Builders = builders;
             this.ExceptionBuilders = exceptionBuilders;
-            this.RollbarClient = new RollbarClient();
+            this.RollbarClient = rollbarClient;
         }
 
         protected IEnumerable<IBuilder> Builders { get; set; }

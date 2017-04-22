@@ -4,6 +4,7 @@
     using Core;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Options;
     using Moq;
     using System;
     using System.Threading.Tasks;
@@ -44,20 +45,39 @@
             }
             catch(Exception exception)
             {
-                await this.Rollbar.SendException(exception);
+                var response = await this.Rollbar.SendException(exception);
+                Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
             }
         }
 
         [Fact]
         public async Task SuccessfullyReportMessage()
         {
-            await this.Rollbar.SendMessage("Hello");
+            var response = await this.Rollbar.SendMessage("Hello");
+            Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
         }
 
         [Fact]
         public async Task SuccessfullyReportMessageWithLevel()
         {
-            await this.Rollbar.SendMessage(RollbarLevel.Debug, "Hello");
+            var response = await this.Rollbar.SendMessage(RollbarLevel.Debug, "Hello");
+            Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
+        }
+
+        [Fact]
+        public async Task DisabledRollbar()
+        {
+            var options = this.ServiceProvider.GetService<IOptions<RollbarOptions>>().Value;
+            this.Services.Configure<RollbarOptions>(o =>
+            {
+                o.AccessToken = options.AccessToken;
+                o.Disabled = true;
+                o.Environment = options.Environment;
+            });
+            var serviceProvider = this.Services.BuildServiceProvider();
+            var rollbar = serviceProvider.GetService<Rollbar>();
+            var response = await rollbar.SendMessage(RollbarLevel.Debug, "Hello");
+            Assert.Null(response.Result.Uuid);
         }
     }
 }
