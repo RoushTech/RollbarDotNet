@@ -1,4 +1,10 @@
-﻿# 0.5.2
+﻿# 0.6.0
+
+## Features
+
+ - Upgrade to VS2017/CSProj.
+
+# 0.5.2
 <sup>Released: 2017/4/21</sup>
 
 ## Features
