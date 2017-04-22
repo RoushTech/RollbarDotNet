@@ -1,4 +1,9 @@
 ﻿# RollbarDotNet
+[![NuGet](https://img.shields.io/nuget/v/RollbarDotNet.svg)]()
+
+[![Build](https://img.shields.io/teamcity/https/teamcity.roushtech.net/s/RollbarDotNet_Build.svg)]()
+[![SonarQube Tech Debt](https://img.shields.io/sonar/https/sonarqube.roushtech.net/RollbarDotNet/tech_debt.svg)]()
+[![SonarQube Coverage](https://img.shields.io/sonar/https/sonarqube.roushtech.net/RollbarDotNet/coverage.svg)]()
 
 Rollbar support for your .NET Core projects, relies on dependency injection and hooks up to your ASP.NET Core pipeline for easy 
 
@@ -99,7 +104,11 @@ var rollbar = new Rollbar(
         new ConfigurationBuilder(rollbarOptions),
         new EnvironmentBuilder(new SystemDateTime()), // SystemDateTime abstracts DateTime for mocking
         new NotifierBuilder()
-    }
+    },
+	new IExceptionBuilder[] {
+		new ExceptionBuilder()
+	},
+	new RollBarClient(rollbarOptions)
 );
 
 try

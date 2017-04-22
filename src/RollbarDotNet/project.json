@@ -15,7 +15,7 @@
       "Error"
     ]
   },
-  "version": "0.5.1",
+  "version": "0.5.2",
   "dependencies": {
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
     "Microsoft.AspNetCore.Http": "1.0.0",

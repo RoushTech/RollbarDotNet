@@ -6,6 +6,7 @@
     using Moq;
     using Payloads;
     using RollbarDotNet.Builder;
+    using System;
     using System.Collections.Generic;
     using System.Net;
     using Xunit;
@@ -113,7 +114,23 @@
             Assert.Equal("?query=test&blacklist=**********", queryString);
         }
 
-        public IHttpContextAccessor CreateIHttpContextAccessor(string method)
+        /// <summary>
+        /// Caused when you POST a JSON payload -- Request.Form is NOT valid and the call will throw, this checks
+        /// and makes sure we're properly checking the HasFormContentType flag.
+        /// https://github.com/RoushTech/RollbarDotNet/issues/54
+        /// </summary>
+        [Fact]
+        public void Bug_ThrowsIncorrectContentType()
+        {
+            var mock = this.CreateIHttpContextAccessor("POST");
+            mock.Setup(h => h.HttpContext.Request.HasFormContentType).Returns(false);
+            mock.Setup(h => h.HttpContext.Request.Form).Throws(new InvalidOperationException("Incorrect Content-Type: application/json; charset=UTF-8"));
+            var requestBuilder = new RequestBuilder(this.GenerateBacklistCollection(), mock.Object);
+            var payload = new Payload();
+            requestBuilder.Execute(payload);
+        }
+
+        public Mock<IHttpContextAccessor> CreateIHttpContextAccessor(string method)
         {
             var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Scheme).Returns("http");
@@ -123,20 +140,24 @@
             httpContextAccessorMock.Setup(h => h.HttpContext.Features.Get<IHttpConnectionFeature>().RemoteIpAddress).Returns(IPAddress.Loopback);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Headers).Returns(this.GenerateHeaderDictionary);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Query).Returns(this.GenerateQueryCollection);
+            httpContextAccessorMock.Setup(h => h.HttpContext.Request.HasFormContentType).Returns(true);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Form).Returns(this.GenerateFormCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Cookies).Returns(this.GenerateCookieCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.QueryString).Returns(new QueryString("?query=test&blacklist=here"));
-            return httpContextAccessorMock.Object;
+            return httpContextAccessorMock;
+        }
+
+        protected IBlacklistCollection GenerateBacklistCollection(bool enableBlacklist = false)
+        {
+            var blacklistCollectionMock = new Mock<IBlacklistCollection>();
+            blacklistCollectionMock.Setup(b => b.Check("test")).Returns(false);
+            blacklistCollectionMock.Setup(b => b.Check("blacklist")).Returns(enableBlacklist);
+            return blacklistCollectionMock.Object;
         }
 
         protected Payload GeneratePayload(bool enableBlacklist = false, string method = "GET")
         {
-
-            var blacklistCollectionMock = new Mock<IBlacklistCollection>();
-            blacklistCollectionMock.Setup(b => b.Check("test")).Returns(false);
-            blacklistCollectionMock.Setup(b => b.Check("blacklist")).Returns(enableBlacklist);
-
-            var requestBuilder = new RequestBuilder(blacklistCollectionMock.Object, this.CreateIHttpContextAccessor(method));
+            var requestBuilder = new RequestBuilder(this.GenerateBacklistCollection(enableBlacklist), this.CreateIHttpContextAccessor(method).Object);
             var payload = new Payload();
             requestBuilder.Execute(payload);
             return payload;

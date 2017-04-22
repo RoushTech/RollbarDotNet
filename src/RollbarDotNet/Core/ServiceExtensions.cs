@@ -12,7 +12,7 @@
         public static IServiceCollection AddRollbar(this IServiceCollection services)
         {
             return services
-                .AddSingleton<IBuilder, Builder.ConfigurationBuilder>()
+                .AddSingleton<IBuilder, ConfigurationBuilder>()
                 .AddSingleton<IBuilder, EnvironmentBuilder>()
                 .AddSingleton<IBuilder, NotifierBuilder>()
                 .AddSingleton<IDateTime, SystemDateTime>()
@@ -20,6 +20,7 @@
                 .AddSingleton<IBlacklister, ConfigurationBlacklister>()
                 .AddSingleton<IBlacklistCollection, BlacklistCollection>()
                 .AddSingleton<IExceptionBuilder, ExceptionBuilder>()
+                .AddSingleton<RollbarClient>()
                 .AddScoped<Rollbar>();
         }
 

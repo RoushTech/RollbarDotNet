@@ -44,7 +44,8 @@
             {
                 request.Get = this.QueryToDictionary(context.Request.Query);
             }
-            else if (context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+            else if (context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase)
+                && context.Request.HasFormContentType)
             {
                 request.Post = this.FormToDictionary(context.Request.Form);
             }
