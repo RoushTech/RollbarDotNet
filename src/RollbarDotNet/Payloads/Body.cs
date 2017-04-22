@@ -8,7 +8,6 @@
     {
         public Body()
         {
-            this.TraceChain = new List<Trace>();
         }
 
         [JsonProperty("trace")]

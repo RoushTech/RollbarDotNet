@@ -20,7 +20,12 @@
             payload.Data.Body.Trace = new Trace();
             payload.Data.Body.Trace.Exception = this.BuildException(exception);
             payload.Data.Body.Trace.Frames = this.BuildFrames(exception);
-            this.BuildTraceList(exception, payload.Data.Body.TraceChain);
+            var traceChain = new List<Trace>();
+            this.BuildTraceList(exception, traceChain);
+            if(traceChain.Count > 0)
+            {
+                payload.Data.Body.TraceChain = traceChain;
+            }
         }
 
         protected void BuildTraceList(System.Exception exception, List<Trace> traceList)
