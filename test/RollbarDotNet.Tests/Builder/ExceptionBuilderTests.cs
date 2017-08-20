@@ -3,6 +3,7 @@
     using Payloads;
     using RollbarDotNet.Builder;
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using Xunit;
 
@@ -28,10 +29,17 @@
             catch (System.Exception exception)
             {
                 this.ExceptionBuilder.Execute(this.Payload, exception);
-                var payloadException = this.Payload.Data?.Body?.Trace?.Exception;
-                Assert.Equal("Exception", payloadException?.Class);
-                Assert.Equal("test exception", payloadException?.Message);
-                Assert.Equal(exception.StackTrace, payloadException?.Description);
+                var payload = this.Payload.Data?.Body?.TraceChain?.FirstOrDefault();
+                Assert.Equal("Exception", payload?.Exception?.Class);
+                Assert.Equal("test exception", payload?.Exception ?.Message);
+                Assert.True(payload?.Frames?.Count == 1);
+                var frame = payload?.Frames?.FirstOrDefault();
+                Assert.Equal("Void SetsPayload()", frame?.Method);
+                var stackTrace = new StackTrace(exception, true);
+                var stackTraceFrame = stackTrace.GetFrame(0);
+                Assert.Equal(stackTraceFrame.GetFileColumnNumber(), frame?.ColumnNumber);
+                Assert.Equal(stackTraceFrame.GetFileLineNumber(), frame?.LineNumber);
+                Assert.Equal(stackTraceFrame.GetFileName(), frame?.Filename);
             }
         }
 
@@ -58,10 +66,23 @@
         [Fact]
         public void BuildsInnerException()
         {
-
             try
             {
-                throw new System.Exception("test exception", new InvalidCastException("inner exception", new InvalidOperationException("inner exception2")));
+                try
+                {
+                    try
+                    {
+                        throw new InvalidOperationException("inner exception2");
+                    }
+                    catch (System.Exception inner2)
+                    {
+                        throw new InvalidCastException("inner exception", inner2);
+                    }
+                }
+                catch (System.Exception inner)
+                {
+                    throw new System.Exception("test exception", inner);
+                }
             }
             catch (System.Exception exception)
             {
@@ -69,14 +90,12 @@
                 var body = this.Payload.Data?.Body;
                 Assert.NotNull(body?.TraceChain);
                 var first = body.TraceChain.First();
-                Assert.Equal("InvalidCastException", first.Exception?.Class);
-                Assert.Equal("inner exception", first.Exception?.Message);
-                Assert.Equal(exception.InnerException.StackTrace, first.Exception?.Description);
+                Assert.Equal("Exception", first.Exception?.Class);
+                Assert.Equal("test exception", first.Exception?.Message);
 
                 var second = body.TraceChain.Skip(1).First();
-                Assert.Equal("InvalidOperationException", second.Exception?.Class);
-                Assert.Equal("inner exception2", second.Exception?.Message);
-                Assert.Equal(exception.InnerException.InnerException.StackTrace, second.Exception?.Description);
+                Assert.Equal("InvalidCastException", second.Exception?.Class);
+                Assert.Equal("inner exception", second.Exception?.Message);
             }
         }
     }

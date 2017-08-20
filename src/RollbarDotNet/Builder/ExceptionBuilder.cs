@@ -1,7 +1,9 @@
 ﻿namespace RollbarDotNet.Builder
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Payloads;
+    using Trace = Payloads.Trace;
 
     public class ExceptionBuilder : IExceptionBuilder
     {
@@ -17,9 +19,6 @@
                 throw new System.ArgumentNullException(nameof(exception));
             }
 
-            payload.Data.Body.Trace = new Trace();
-            payload.Data.Body.Trace.Exception = this.BuildException(exception);
-            payload.Data.Body.Trace.Frames = this.BuildFrames(exception);
             var traceChain = new List<Trace>();
             this.BuildTraceList(exception, traceChain);
             if(traceChain.Count > 0)
@@ -30,20 +29,38 @@
 
         protected void BuildTraceList(System.Exception exception, List<Trace> traceList)
         {
-            if(exception.InnerException != null)
+            var trace = new Trace();
+            trace.Exception = this.BuildException(exception);
+            trace.Frames = this.BuildFrames(exception);
+            traceList.Add(trace);
+            if (exception.InnerException != null)
             {
-                var trace = new Trace();
-                trace.Exception = this.BuildException(exception.InnerException);
-                traceList.Add(trace);
                 this.BuildTraceList(exception.InnerException, traceList);
             }
         }
 
         protected List<Frame> BuildFrames(System.Exception exception)
         {
-            // Frames not supported by .NET Core yet
-            // https://github.com/dotnet/corefx/issues/1797
-            return new List<Frame>();
+            var frames = new List<Frame>();
+            var stacktrace = new StackTrace(exception, true);
+            foreach (var stackTraceFrame in stacktrace.GetFrames())
+            {
+                var frame = new Frame
+                {
+                    Filename = stackTraceFrame.GetFileName(),
+                    ColumnNumber = stackTraceFrame.GetFileColumnNumber(),
+                    LineNumber = stackTraceFrame.GetFileLineNumber(),
+                    Method = stackTraceFrame.GetMethod()?.ToString()
+                };
+                frames.Add(frame);
+            }
+
+            if (exception.InnerException != null)
+            {
+                frames.AddRange(this.BuildFrames(exception.InnerException));
+            }
+
+            return frames;
         }
 
         protected Exception BuildException(System.Exception exception)
@@ -51,7 +68,6 @@
             var payloadException = new Exception();
             payloadException.Class = exception.GetType().Name;
             payloadException.Message = exception.Message;
-            payloadException.Description = exception.StackTrace;
             return payloadException;
         }
     }

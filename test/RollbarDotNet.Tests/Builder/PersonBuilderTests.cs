@@ -1,104 +1,104 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Moq;
-using RollbarDotNet.Builder;
-using RollbarDotNet.Payloads;
-using Xunit;
-
-namespace RollbarDotNet.Tests.Builder
+﻿namespace RollbarDotNet.Tests.Builder
 {
+    using System.Security.Claims;
+    using Microsoft.AspNetCore.Http;
+    using Moq;
+    using Payloads;
+    using RollbarDotNet.Builder;
+    using Xunit;
+
     public class PersonBuilderTests
     {
-        private readonly Mock<IHttpContextAccessor> contextAccessor;
-        private readonly Payload payload;
-        private readonly PersonBuilder sut;
-
         public PersonBuilderTests()
         {
-            contextAccessor = new Mock<IHttpContextAccessor>();
-            sut = new PersonBuilder(contextAccessor.Object);
-            payload = new Payload();
+            this._contextAccessor = new Mock<IHttpContextAccessor>();
+            this._sut = new PersonBuilder(this._contextAccessor.Object);
+            this._payload = new Payload();
         }
+
+        private readonly Mock<IHttpContextAccessor> _contextAccessor;
+        private readonly Payload _payload;
+        private readonly PersonBuilder _sut;
 
         [Fact]
         public void Execute_NoPrincipal_ShouldSetEmptyPerson()
         {
-            contextAccessor.Setup(accessor => accessor.HttpContext.User).Returns((ClaimsPrincipal)null);
+            this._contextAccessor.Setup(accessor => accessor.HttpContext.User).Returns((ClaimsPrincipal) null);
 
-            sut.Execute(payload);
+            this._sut.Execute(this._payload);
 
-            var person = payload.Data.Person;
+            var person = this._payload.Data.Person;
             Assert.Equal(true, string.IsNullOrEmpty(person.Id));
             Assert.Equal(true, string.IsNullOrEmpty(person.Email));
             Assert.Equal(true, string.IsNullOrEmpty(person.Username));
         }
 
         [Fact]
-        public void Execute_PrincipalWithName_ShouldSetName()
+        public void Execute_PrincipalWithEmail_ShouldSetEmail()
         {
-            const string expected = "name";
-            contextAccessor.Setup(accessor => accessor.HttpContext.User.Identity.Name).Returns(expected);
+            const string expected = "email";
+            this._contextAccessor.Setup(accessor => accessor.HttpContext.User)
+                .Returns(new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Email, expected)
+                })));
 
-            sut.Execute(payload);
+            this._sut.Execute(this._payload);
 
-            var person = payload.Data.Person;
-            Assert.Equal(expected, person.Username);
+            var person = this._payload.Data.Person;
+            Assert.Equal(expected, person.Email);
         }
 
         [Fact]
         public void Execute_PrincipalWithId_ShouldSetId()
         {
             const string expected = "id";
-            contextAccessor.Setup(accessor => accessor.HttpContext.User)
+            this._contextAccessor.Setup(accessor => accessor.HttpContext.User)
                 .Returns(new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, expected)
                 })));
 
-            sut.Execute(payload);
+            this._sut.Execute(this._payload);
 
-            var person = payload.Data.Person;
+            var person = this._payload.Data.Person;
             Assert.Equal(expected, person.Id);
         }
 
         [Fact]
-        public void Execute_PrincipalWithoutId_ShouldSetIdToEmpty()
+        public void Execute_PrincipalWithName_ShouldSetName()
         {
-            contextAccessor.Setup(accessor => accessor.HttpContext.User)
-                .Returns(new ClaimsPrincipal(new ClaimsIdentity()));
+            const string expected = "name";
+            this._contextAccessor.Setup(accessor => accessor.HttpContext.User.Identity.Name).Returns(expected);
 
-            sut.Execute(payload);
+            this._sut.Execute(this._payload);
 
-            var person = payload.Data.Person;
-            Assert.Equal(true, string.IsNullOrEmpty(person.Id));
-        }
-
-        [Fact]
-        public void Execute_PrincipalWithEmail_ShouldSetEmail()
-        {
-            const string expected = "email";
-            contextAccessor.Setup(accessor => accessor.HttpContext.User)
-                .Returns(new ClaimsPrincipal(new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Email, expected)
-                })));
-
-            sut.Execute(payload);
-
-            var person = payload.Data.Person;
-            Assert.Equal(expected, person.Email);
+            var person = this._payload.Data.Person;
+            Assert.Equal(expected, person.Username);
         }
 
         [Fact]
         public void Execute_PrincipalWithoutEmail_ShouldSetEmailToEmpty()
         {
-            contextAccessor.Setup(accessor => accessor.HttpContext.User)
+            this._contextAccessor.Setup(accessor => accessor.HttpContext.User)
                 .Returns(new ClaimsPrincipal(new ClaimsIdentity()));
 
-            sut.Execute(payload);
+            this._sut.Execute(this._payload);
 
-            var person = payload.Data.Person;
+            var person = this._payload.Data.Person;
             Assert.Equal(true, string.IsNullOrEmpty(person.Email));
+        }
+
+        [Fact]
+        public void Execute_PrincipalWithoutId_ShouldSetIdToEmpty()
+        {
+            this._contextAccessor.Setup(accessor => accessor.HttpContext.User)
+                .Returns(new ClaimsPrincipal(new ClaimsIdentity()));
+
+            this._sut.Execute(this._payload);
+
+            var person = this._payload.Data.Person;
+            Assert.Equal(true, string.IsNullOrEmpty(person.Id));
         }
     }
 }
