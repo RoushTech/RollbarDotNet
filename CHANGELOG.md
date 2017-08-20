@@ -1,4 +1,13 @@
-﻿# 0.5.2
+﻿# 0.6.0
+
+## Features
+<sup>Released: 2017/8/20</sup>
+
+ - Upgrade to VS2017/CSProj.
+ - Add trace frame support.
+ - Also target NetStandard2.0
+
+# 0.5.2
 <sup>Released: 2017/4/21</sup>
 
 ## Features

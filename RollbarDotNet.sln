@@ -1,21 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FBE55ED6-5E60-41F8-B5C0-7C97D04A1A6C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{04899B07-3768-4373-9CB8-1A0DBA28C035}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
-		global.json = global.json
 		LICENSE.txt = LICENSE.txt
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RollbarDotNet", "src\RollbarDotNet\RollbarDotNet.xproj", "{6CF5EF94-87E9-4436-AA9B-072C86B7E572}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RollbarDotNet", "src\RollbarDotNet\RollbarDotNet.csproj", "{6CF5EF94-87E9-4436-AA9B-072C86B7E572}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RollbarDotNet.Tests", "test\RollbarDotNet.Tests\RollbarDotNet.Tests.xproj", "{14F85500-0E09-4DEA-A0D6-DE7B8D4BDED7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RollbarDotNet.Tests", "test\RollbarDotNet.Tests\RollbarDotNet.Tests.csproj", "{14F85500-0E09-4DEA-A0D6-DE7B8D4BDED7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A7291A6A-8F50-4A1E-BCAC-51A9A88AFDEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6CF5EF94-87E9-4436-AA9B-072C86B7E572} = {FBE55ED6-5E60-41F8-B5C0-7C97D04A1A6C}
-		{14F85500-0E09-4DEA-A0D6-DE7B8D4BDED7} = {FBE55ED6-5E60-41F8-B5C0-7C97D04A1A6C}
+		{14F85500-0E09-4DEA-A0D6-DE7B8D4BDED7} = {A7291A6A-8F50-4A1E-BCAC-51A9A88AFDEB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {71533B28-842E-4D02-A21A-6BC3B665CAB6}
 	EndGlobalSection
 EndGlobal

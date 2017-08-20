@@ -21,7 +21,7 @@
                     .AddSingleton(mockHostingEnvironment.Object);
             services.Configure<RollbarOptions>(o =>
             {
-                o.AccessToken = Environment.GetEnvironmentVariable("ROLLBAR_TOKEN");
+                o.AccessToken = Environment.GetEnvironmentVariable("ROLLBAR_TOKEN") ?? "992eb96a7d4b4d62bd529188bb8152cb";
                 o.Environment = "Testing";
             });
 
@@ -41,7 +41,14 @@
         {
             try
             {
-                throw new Exception("Test");
+                try
+                {
+                    throw new Exception("Inner");
+                }
+                catch (Exception inner)
+                {
+                    throw new Exception("Test", inner);
+                }
             }
             catch(Exception exception)
             {
