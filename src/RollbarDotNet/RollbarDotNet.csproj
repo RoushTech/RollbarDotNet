@@ -11,7 +11,6 @@
     <PackageTags>Rollbar;dotnet;Core;Error</PackageTags>
     <PackageProjectUrl>https://github.com/RoushTech/RollbarDotNet</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/RoushTech/RollbarDotNet/blob/master/LICENSE.txt</PackageLicenseUrl>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -48,6 +47,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
-  </ItemGroup>
+  
+</ItemGroup>
   
 </Project>
