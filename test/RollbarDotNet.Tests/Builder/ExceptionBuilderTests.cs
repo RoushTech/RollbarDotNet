@@ -36,7 +36,7 @@
                 var frame = payload?.Frames?.FirstOrDefault();
                 Assert.Equal("Void SetsPayload()", frame?.Method);
                 var stackTrace = new StackTrace(exception, true);
-                var stackTraceFrame = stackTrace.GetFrame(0);
+                var stackTraceFrame = stackTrace.GetFrames().FirstOrDefault();
                 Assert.Equal(stackTraceFrame.GetFileColumnNumber(), frame?.ColumnNumber);
                 Assert.Equal(stackTraceFrame.GetFileLineNumber(), frame?.LineNumber);
                 Assert.Equal(stackTraceFrame.GetFileName(), frame?.Filename);
