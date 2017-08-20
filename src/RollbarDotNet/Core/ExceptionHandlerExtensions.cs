@@ -1,5 +1,4 @@
-﻿#if DOTNET
-namespace RollbarDotNet.Core
+﻿namespace RollbarDotNet.Core
 {
     using System;
 
@@ -18,4 +17,3 @@ namespace RollbarDotNet.Core
         }
     }
 }
-#endif

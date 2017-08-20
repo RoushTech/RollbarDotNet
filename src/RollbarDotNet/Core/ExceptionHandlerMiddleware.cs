@@ -1,5 +1,4 @@
-﻿#if DOTNET
-namespace RollbarDotNet.Core
+﻿namespace RollbarDotNet.Core
 {
     using Microsoft.AspNetCore.Http;
     using System;
@@ -41,4 +40,3 @@ namespace RollbarDotNet.Core
         }
     }
 }
-#endif
