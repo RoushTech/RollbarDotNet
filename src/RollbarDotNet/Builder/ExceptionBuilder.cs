@@ -1,35 +1,37 @@
 ﻿namespace RollbarDotNet.Builder
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using Payloads;
-    using Trace = Payloads.Trace;
+    using Exception = System.Exception;
 
     public class ExceptionBuilder : IExceptionBuilder
     {
-        public void Execute(Payload payload, System.Exception exception)
+        public void Execute(Payload payload, Exception exception)
         {
-            if(payload == null)
+            if (payload == null)
             {
-                throw new System.ArgumentNullException(nameof(payload));
+                throw new ArgumentNullException(nameof(payload));
             }
 
-            if(exception == null)
+            if (exception == null)
             {
-                throw new System.ArgumentNullException(nameof(exception));
+                throw new ArgumentNullException(nameof(exception));
             }
 
-            var traceChain = new List<Trace>();
+            var traceChain = new List<Payloads.Trace>();
             this.BuildTraceList(exception, traceChain);
-            if(traceChain.Count > 0)
+            if (traceChain.Count > 0)
             {
                 payload.Data.Body.TraceChain = traceChain;
             }
         }
 
-        protected void BuildTraceList(System.Exception exception, List<Trace> traceList)
+        protected void BuildTraceList(Exception exception, List<Payloads.Trace> traceList)
         {
-            var trace = new Trace();
+            var trace = new Payloads.Trace();
             trace.Exception = this.BuildException(exception);
             trace.Frames = this.BuildFrames(exception);
             traceList.Add(trace);
@@ -39,18 +41,26 @@
             }
         }
 
-        protected List<Frame> BuildFrames(System.Exception exception)
+        protected List<Frame> BuildFrames(Exception exception)
         {
             var frames = new List<Frame>();
             var stacktrace = new StackTrace(exception, true);
             foreach (var stackTraceFrame in stacktrace.GetFrames())
             {
+                var method = stackTraceFrame.GetMethod();
+                var methodParameters = method.GetParameters();
+                var parameters = methodParameters.Length == 0
+                    ? string.Empty
+                    : method.GetParameters()
+                        .Select(p => $"{p.ParameterType.FullName} {p.Name}")
+                        .Aggregate((p1, p2) => $"{p1}, {p2}");
+                var methodName = $"{method.DeclaringType.FullName}.{method.Name}({parameters})";
                 var frame = new Frame
                 {
                     Filename = stackTraceFrame.GetFileName(),
                     ColumnNumber = stackTraceFrame.GetFileColumnNumber(),
                     LineNumber = stackTraceFrame.GetFileLineNumber(),
-                    Method = stackTraceFrame.GetMethod()?.ToString()
+                    Method = methodName
                 };
                 frames.Add(frame);
             }
@@ -63,9 +73,9 @@
             return frames;
         }
 
-        protected Exception BuildException(System.Exception exception)
+        protected Payloads.Exception BuildException(Exception exception)
         {
-            var payloadException = new Exception();
+            var payloadException = new Payloads.Exception();
             payloadException.Class = exception.GetType().Name;
             payloadException.Message = exception.Message;
             return payloadException;

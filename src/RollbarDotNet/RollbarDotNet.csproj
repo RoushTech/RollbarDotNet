@@ -4,7 +4,7 @@
     <Description>Rollbar Integration for .NET Core</Description>
     <Copyright>William Roush 2016-2017</Copyright>
     <AssemblyTitle>RollbarDotNet</AssemblyTitle>
-    <VersionPrefix>0.6.1</VersionPrefix>
+    <VersionPrefix>0.6.2</VersionPrefix>
     <Authors>William Roush</Authors>
     <AssemblyName>RollbarDotNet</AssemblyName>
     <PackageId>RollbarDotNet</PackageId>

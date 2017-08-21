@@ -24,7 +24,7 @@
         {
             try
             {
-                throw new System.Exception("test exception");
+                this.ThrowException("", 0);
             }
             catch (System.Exception exception)
             {
@@ -32,15 +32,20 @@
                 var payload = this.Payload.Data?.Body?.TraceChain?.FirstOrDefault();
                 Assert.Equal("Exception", payload?.Exception?.Class);
                 Assert.Equal("test exception", payload?.Exception ?.Message);
-                Assert.True(payload?.Frames?.Count == 1);
+                Assert.True(payload?.Frames?.Count == 2);
                 var frame = payload?.Frames?.FirstOrDefault();
-                Assert.Equal("Void SetsPayload()", frame?.Method);
+                Assert.Equal("RollbarDotNet.Tests.Builder.ExceptionBuilderTests.ThrowException(System.String a, System.Int32 b)", frame?.Method);
                 var stackTrace = new StackTrace(exception, true);
                 var stackTraceFrame = stackTrace.GetFrames().FirstOrDefault();
                 Assert.Equal(stackTraceFrame.GetFileColumnNumber(), frame?.ColumnNumber);
                 Assert.Equal(stackTraceFrame.GetFileLineNumber(), frame?.LineNumber);
                 Assert.Equal(stackTraceFrame.GetFileName(), frame?.Filename);
             }
+        }
+
+        protected void ThrowException(string a, int b)
+        {
+            throw new System.Exception("test exception");
         }
 
         [Fact]
