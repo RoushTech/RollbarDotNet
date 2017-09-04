@@ -1,4 +1,7 @@
-﻿# 0.6.2
+﻿# 0.6.3
+<sup>Released: TBA</sup>
+
+# 0.6.2
 <sup>Released: 2017/8/20</sup>
 
 - Change method trace string to have full namespace, method name and parameters.
