@@ -1,4 +1,9 @@
-﻿# 0.6.2
+﻿# 0.6.3
+<sup>Released: 2017/09/04</sup>
+
+- Use per-request dependencies for handling RollbarClient to prevent errors.
+
+# 0.6.2
 <sup>Released: 2017/8/20</sup>
 
 - Change method trace string to have full namespace, method name and parameters.
