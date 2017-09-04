@@ -7,18 +7,14 @@
     public class ExceptionHandlerMiddleware
     {
         public ExceptionHandlerMiddleware(
-            RequestDelegate next,
-            Rollbar rollbar)
+            RequestDelegate next)
         {
             this.Next = next;
-            this.Rollbar = rollbar;
         }
 
         protected RequestDelegate Next { get; set; }
-        
-        protected Rollbar Rollbar { get; set; }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, Rollbar rollbar)
         {
             try
             {
@@ -26,7 +22,7 @@
             }
             catch(Exception exception)
             {
-                var response = await this.Rollbar.SendException(exception);
+                var response = await rollbar.SendException(exception);
                 var rollbarResponseFeature = new RollbarResponseFeature
                 {
                     Handled = true,
