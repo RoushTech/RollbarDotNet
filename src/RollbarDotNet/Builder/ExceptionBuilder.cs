@@ -54,7 +54,7 @@
                     : method.GetParameters()
                         .Select(p => $"{p.ParameterType.FullName} {p.Name}")
                         .Aggregate((p1, p2) => $"{p1}, {p2}");
-                var methodName = $"{method.DeclaringType.FullName}.{method.Name}({parameters})";
+                var methodName = $"{method.DeclaringType?.FullName ?? "(unknown)"}.{method.Name}({parameters})";
                 var frame = new Frame
                 {
                     Filename = stackTraceFrame.GetFileName(),
