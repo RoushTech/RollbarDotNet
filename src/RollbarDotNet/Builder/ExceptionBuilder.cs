@@ -45,7 +45,12 @@
         {
             var frames = new List<Frame>();
             var stacktrace = new StackTrace(exception, true);
-            foreach (var stackTraceFrame in stacktrace.GetFrames())
+            var stackTraceFrames = stacktrace.GetFrames();
+            if (stackTraceFrames == null)
+            {
+                return frames;
+            }
+            foreach (var stackTraceFrame in stackTraceFrames)
             {
                 var method = stackTraceFrame.GetMethod();
                 var methodParameters = method.GetParameters();
