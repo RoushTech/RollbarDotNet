@@ -1,4 +1,9 @@
-﻿# 0.6.3
+﻿# 0.6.4
+<sup>Released: 2017/10/22</sup>
+
+- Fix a null reference exception when no declaring type on thrown exception.
+
+# 0.6.3
 <sup>Released: 2017/09/04</sup>
 
 - Use per-request dependencies for handling RollbarClient to prevent errors.
