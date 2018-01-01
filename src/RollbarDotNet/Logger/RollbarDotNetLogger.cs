@@ -26,7 +26,7 @@
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            throw new NotImplementedException();
+            return logLevel == LogLevel.Critical || logLevel == LogLevel.Error || logLevel == LogLevel.Warning;
         }
 
         public IDisposable BeginScope<TState>(TState state)
