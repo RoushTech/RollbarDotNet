@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>Rollbar Integration for .NET Core</Description>
-    <Copyright>William Roush 2016-2017</Copyright>
+    <Copyright>William Roush 2016-2018</Copyright>
     <AssemblyTitle>RollbarDotNet</AssemblyTitle>
-    <VersionPrefix>0.6.4</VersionPrefix>
+    <VersionPrefix>0.7.0</VersionPrefix>
     <Authors>William Roush</Authors>
     <AssemblyName>RollbarDotNet</AssemblyName>
     <PackageId>RollbarDotNet</PackageId>

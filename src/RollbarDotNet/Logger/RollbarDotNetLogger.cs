@@ -1,7 +1,6 @@
 ﻿namespace RollbarDotNet.Logger
 {
     using System;
-    using System.Threading.Tasks;
     using Configuration;
     using Microsoft.Extensions.Logging;
 
