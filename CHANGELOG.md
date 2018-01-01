@@ -1,4 +1,8 @@
-﻿# 0.6.4
+﻿# 0.7.0
+
+- Added logger.
+
+# 0.6.4
 <sup>Released: 2017/10/22</sup>
 
 - Fix a null reference exception when no declaring type on thrown exception.
