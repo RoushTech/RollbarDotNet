@@ -21,7 +21,7 @@
                 throw new ArgumentNullException(nameof(exception));
             }
 
-            var traceChain = new List<Payloads.Trace>();
+            var traceChain = new List<Trace>();
             this.BuildTraceList(exception, traceChain);
             if (traceChain.Count > 0)
             {
@@ -29,11 +29,13 @@
             }
         }
 
-        protected void BuildTraceList(Exception exception, List<Payloads.Trace> traceList)
+        protected void BuildTraceList(Exception exception, List<Trace> traceList)
         {
-            var trace = new Payloads.Trace();
-            trace.Exception = this.BuildException(exception);
-            trace.Frames = this.BuildFrames(exception);
+            var trace = new Trace
+            {
+                Exception = this.BuildException(exception),
+                Frames = this.BuildFrames(exception)
+            };
             traceList.Add(trace);
             if (exception.InnerException != null)
             {

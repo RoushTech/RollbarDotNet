@@ -13,12 +13,12 @@
             IHttpContextAccessor contextAccessor)
         {
             this.BlacklistCollection = blacklistCollection;
-            this.contextAccessor = contextAccessor;
+            this.ContextAccessor = contextAccessor;
         }
 
         protected IBlacklistCollection BlacklistCollection { get; set; }
 
-        protected readonly IHttpContextAccessor contextAccessor;
+        protected IHttpContextAccessor ContextAccessor { get; }
 
         public void Execute(Payload payload)
         {
@@ -28,7 +28,7 @@
         
         protected void BuildRequest(Request request)
         {
-            var context = this.contextAccessor.HttpContext;
+            var context = this.ContextAccessor.HttpContext;
             if(context == null)
             {
                 return;

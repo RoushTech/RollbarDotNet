@@ -55,7 +55,7 @@
         protected Payload SetupPayload(RollbarLevel level)
         {
             var payload = new Payload();
-            payload.Data.Level = LevelToString(level);
+            payload.Data.Level = this.LevelToString(level);
             this.ExecuteBuilders(payload);
             return payload;
         }
