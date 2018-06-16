@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Payloads;
     using Exception = System.Exception;
@@ -46,7 +45,7 @@
         protected List<Frame> BuildFrames(Exception exception)
         {
             var frames = new List<Frame>();
-            var stacktrace = new StackTrace(exception, true);
+            var stacktrace = new System.Diagnostics.StackTrace(exception, true);
             var stackTraceFrames = stacktrace.GetFrames();
             if (stackTraceFrames == null)
             {
