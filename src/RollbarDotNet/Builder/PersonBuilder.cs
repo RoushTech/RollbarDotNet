@@ -1,27 +1,27 @@
 ﻿namespace RollbarDotNet.Builder
 {
+    using System.Security.Claims;
     using Microsoft.AspNetCore.Http;
     using Payloads;
-    using System.Security.Claims;
 
     public class PersonBuilder : IBuilder
     {
-        private readonly IHttpContextAccessor contextAccessor;
+        protected IHttpContextAccessor ContextAccessor { get; }
 
         public PersonBuilder(IHttpContextAccessor contextAccessor)
         {
-            this.contextAccessor = contextAccessor;
+            this.ContextAccessor = contextAccessor;
         }
 
         public void Execute(Payload payload)
         {
             payload.Data.Person = new Person();
-            BuildPerson(payload.Data.Person);
+            this.BuildPerson(payload.Data.Person);
         }
 
         private void BuildPerson(Person person)
         {
-            var principal = contextAccessor.HttpContext?.User;
+            var principal = this.ContextAccessor.HttpContext?.User;
             if (principal == null)
             {
                 return;

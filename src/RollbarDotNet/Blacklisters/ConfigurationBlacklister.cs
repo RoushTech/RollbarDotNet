@@ -1,13 +1,19 @@
 ﻿namespace RollbarDotNet.Blacklisters
 {
-    using Configuration;
-    using Microsoft.Extensions.Options;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using Configuration;
+    using Microsoft.Extensions.Options;
 
     public class ConfigurationBlacklister : IBlacklister
     {
+        public BlacklistConfiguration Configuration { get; }
+
+        public List<Regex> RegexChecks { get; }
+
+        public List<string> StringChecks { get; }
+
         public ConfigurationBlacklister(IOptions<RollbarOptions> config)
         {
             this.Configuration = config?.Value?.Blacklist;
@@ -19,12 +25,6 @@
                 this.Configuration.Text?.ForEach(t => this.StringChecks.Add(t));
             }
         }
-
-        public BlacklistConfiguration Configuration { get; set; }
-
-        public List<string> StringChecks { get; set; }
-
-        public List<Regex> RegexChecks { get; set; }
 
         public bool Check(string name)
         {

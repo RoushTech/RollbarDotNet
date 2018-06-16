@@ -1,18 +1,18 @@
 ﻿namespace RollbarDotNet.Core
 {
-    using Microsoft.AspNetCore.Http;
     using System;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
 
     public class ExceptionHandlerMiddleware
     {
+        protected RequestDelegate Next { get; set; }
+
         public ExceptionHandlerMiddleware(
             RequestDelegate next)
         {
             this.Next = next;
         }
-
-        protected RequestDelegate Next { get; set; }
 
         public async Task Invoke(HttpContext context, Rollbar rollbar)
         {
@@ -20,7 +20,7 @@
             {
                 await this.Next(context);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 var response = await rollbar.SendException(exception);
                 var rollbarResponseFeature = new RollbarResponseFeature

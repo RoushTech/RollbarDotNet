@@ -8,15 +8,15 @@
 
     public class RollbarDotNetLoggerProvider : ILoggerProvider
     {
+        protected ConcurrentDictionary<string, RollbarDotNetLogger> Loggers { get; }
+
+        protected IServiceProvider ServiceProvider { get; }
+
         public RollbarDotNetLoggerProvider(IServiceProvider serviceProvider)
         {
             this.Loggers = new ConcurrentDictionary<string, RollbarDotNetLogger>();
             this.ServiceProvider = serviceProvider;
         }
-
-        protected ConcurrentDictionary<string, RollbarDotNetLogger> Loggers { get; }
-
-        protected IServiceProvider ServiceProvider { get; }
 
         public void Dispose()
         {
@@ -26,7 +26,7 @@
         public ILogger CreateLogger(string categoryName)
         {
             var rollbar = this.ServiceProvider.GetRequiredService<Rollbar>();
-            var options = ServiceProvider.GetRequiredService<RollbarOptions>();
+            var options = this.ServiceProvider.GetRequiredService<RollbarOptions>();
             return this.Loggers.GetOrAdd(categoryName, name => new RollbarDotNetLogger(rollbar, options));
         }
     }

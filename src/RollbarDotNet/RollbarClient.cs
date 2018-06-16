@@ -1,27 +1,27 @@
 ﻿namespace RollbarDotNet
 {
-    using Configuration;
-    using Microsoft.Extensions.Options;
-    using Newtonsoft.Json;
-    using Payloads;
     using System;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+    using Configuration;
+    using Microsoft.Extensions.Options;
+    using Newtonsoft.Json;
+    using Payloads;
 
     public class RollbarClient
     {
+        public Configuration.Configuration Configuration { get; }
+
+        protected RollbarOptions RollbarOptions { get; }
+
+        protected Uri RollbarUri => new Uri("https://api.rollbar.com/api/1/item/");
+
         public RollbarClient(IOptions<RollbarOptions> rollbarOptions)
         {
             this.Configuration = new Configuration.Configuration();
             this.RollbarOptions = rollbarOptions.Value;
         }
-
-        public Configuration.Configuration Configuration { get; set; }
-
-        protected RollbarOptions RollbarOptions { get; set; }
-
-        protected Uri RollbarUri { get { return new Uri("https://api.rollbar.com/api/1/item/"); } }
 
         public async Task<Response> Send(Payload payload)
         {
@@ -36,7 +36,7 @@
                 };
             }
 
-            string json = this.Serialize(payload);
+            var json = this.Serialize(payload);
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -46,11 +46,9 @@
                 {
                     throw new HttpRequestException(response.ToString());
                 }
-                else
-                {
-                    var responseJson = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<Response>(responseJson);
-                }
+
+                var responseJson = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Response>(responseJson);
             }
         }
 

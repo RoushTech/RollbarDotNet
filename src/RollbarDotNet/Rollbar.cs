@@ -1,37 +1,38 @@
 ﻿namespace RollbarDotNet
 {
-    using Builder;
-    using Payloads;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Builder;
+    using Payloads;
+    using Exception = System.Exception;
 
     public class Rollbar
     {
-        public Rollbar(IEnumerable<IBuilder> builders, 
-                       IEnumerable<IExceptionBuilder> exceptionBuilders,
-                       RollbarClient rollbarClient)
+        protected IEnumerable<IBuilder> Builders { get; }
+
+        protected IEnumerable<IExceptionBuilder> ExceptionBuilders { get; }
+
+        protected RollbarClient RollbarClient { get; }
+
+        public Rollbar(IEnumerable<IBuilder> builders,
+            IEnumerable<IExceptionBuilder> exceptionBuilders,
+            RollbarClient rollbarClient)
         {
             this.Builders = builders;
             this.ExceptionBuilders = exceptionBuilders;
             this.RollbarClient = rollbarClient;
         }
 
-        protected IEnumerable<IBuilder> Builders { get; set; }
 
-        protected IEnumerable<IExceptionBuilder> ExceptionBuilders { get; set; }
-
-        protected RollbarClient RollbarClient { get; set; }
-
-
-        public async Task<Response> SendException(System.Exception exception)
+        public async Task<Response> SendException(Exception exception)
         {
             return await this.SendException(RollbarLevel.Error, exception);
         }
 
-        public async Task<Response> SendException(RollbarLevel level, System.Exception exception)
+        public async Task<Response> SendException(RollbarLevel level, Exception exception)
         {
             var payload = this.SetupPayload(level);
-            foreach(var exceptionBuilder in this.ExceptionBuilders)
+            foreach (var exceptionBuilder in this.ExceptionBuilders)
             {
                 exceptionBuilder.Execute(payload, exception);
             }

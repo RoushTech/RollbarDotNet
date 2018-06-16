@@ -5,15 +5,15 @@
     [JsonObject(MemberSerialization.OptIn)]
     public class Payload
     {
+        [JsonProperty("access_token")]
+        public string AccessToken { get; set; }
+
+        [JsonProperty("data")]
+        public Data Data { get; set; }
+
         public Payload()
         {
             this.Data = new Data();
         }
-
-        [JsonProperty("access_token")]
-        public string AccessToken { get; set; }
-        
-        [JsonProperty("data")]
-        public Data Data { get; set; }
     }
 }

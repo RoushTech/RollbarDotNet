@@ -1,42 +1,14 @@
 ﻿namespace RollbarDotNet.Tests.Blacklisters
 {
+    using System.Collections.Generic;
+    using Configuration;
     using Microsoft.Extensions.Options;
     using Moq;
     using RollbarDotNet.Blacklisters;
-    using Configuration;
-    using System.Collections.Generic;
     using Xunit;
 
     public class ConfigurationBlacklisterTests
     {
-        [Fact]
-        public void StringPass()
-        {
-            var configurationBlacklister = this.Setup();
-            Assert.Equal(true, configurationBlacklister.Check("test"));
-        }
-
-        [Fact]
-        public void StringFail()
-        {
-            var configurationBlacklister = this.Setup();
-            Assert.Equal(false, configurationBlacklister.Check("testa"));
-        }
-
-        [Fact]
-        public void RegexPass()
-        {
-            var configurationBlacklister = this.Setup();
-            Assert.Equal(true, configurationBlacklister.Check("regex"));
-        }
-
-        [Fact]
-        public void RegexFail()
-        {
-            var configurationBlacklister = this.Setup();
-            Assert.Equal(false, configurationBlacklister.Check("regexfail"));
-        }
-
         protected ConfigurationBlacklister Setup()
         {
             var configurationBlacklistMock = new Mock<IOptions<RollbarOptions>>();
@@ -49,6 +21,34 @@
                 }
             });
             return new ConfigurationBlacklister(configurationBlacklistMock.Object);
+        }
+
+        [Fact]
+        public void RegexFail()
+        {
+            var configurationBlacklister = this.Setup();
+            Assert.Equal(false, configurationBlacklister.Check("regexfail"));
+        }
+
+        [Fact]
+        public void RegexPass()
+        {
+            var configurationBlacklister = this.Setup();
+            Assert.Equal(true, configurationBlacklister.Check("regex"));
+        }
+
+        [Fact]
+        public void StringFail()
+        {
+            var configurationBlacklister = this.Setup();
+            Assert.Equal(false, configurationBlacklister.Check("testa"));
+        }
+
+        [Fact]
+        public void StringPass()
+        {
+            var configurationBlacklister = this.Setup();
+            Assert.Equal(true, configurationBlacklister.Check("test"));
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿namespace RollbarDotNet.Tests.Builder
 {
+    using System;
     using Configuration;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Options;
     using Moq;
+    using Payloads;
     using RollbarDotNet.Builder;
-    using System;
     using Xunit;
 
     public class ConfigurationBuilderTests
@@ -18,9 +18,11 @@
         {
             var configurationMock = new Mock<IOptions<RollbarOptions>>();
             configurationMock.Setup(c => c.Value).Returns(new RollbarOptions());
-            var configurationBuilder = new RollbarDotNet.Builder.ConfigurationBuilder(configurationMock.Object);
-            var exception = Assert.Throws<InvalidOperationException>(() => configurationBuilder.Execute(new Payloads.Payload()));
-            Assert.Equal("Configuration variable for your Rollbar AccessToken must be set (did you include services.Configure<RollbarOptions>?).", exception.Message);
+            var configurationBuilder = new ConfigurationBuilder(configurationMock.Object);
+            var exception = Assert.Throws<InvalidOperationException>(() => configurationBuilder.Execute(new Payload()));
+            Assert.Equal(
+                "Configuration variable for your Rollbar AccessToken must be set (did you include services.Configure<RollbarOptions>?).",
+                exception.Message);
         }
 
         [Fact]
@@ -28,18 +30,21 @@
         {
             var configurationMock = new Mock<IOptions<RollbarOptions>>();
             configurationMock.Setup(c => c.Value).Returns(new RollbarOptions { AccessToken = ACCESSTOKEN });
-            var configurationBuilder = new RollbarDotNet.Builder.ConfigurationBuilder(configurationMock.Object);
-            var exception = Assert.Throws<InvalidOperationException>(() => configurationBuilder.Execute(new Payloads.Payload()));
-            Assert.Equal("Configuration variable for your Rollbar Environment must be set (did you include services.Configure<RollbarOptions>?).", exception.Message);
+            var configurationBuilder = new ConfigurationBuilder(configurationMock.Object);
+            var exception = Assert.Throws<InvalidOperationException>(() => configurationBuilder.Execute(new Payload()));
+            Assert.Equal(
+                "Configuration variable for your Rollbar Environment must be set (did you include services.Configure<RollbarOptions>?).",
+                exception.Message);
         }
-        
+
         [Fact]
         public void SetsPayload()
         {
             var configurationMock = new Mock<IOptions<RollbarOptions>>();
-            configurationMock.Setup(c => c.Value).Returns(new RollbarOptions { AccessToken = ACCESSTOKEN, Environment = ENVIRONMENT });
-            var configurationBuilder = new RollbarDotNet.Builder.ConfigurationBuilder(configurationMock.Object);
-            var payload = new Payloads.Payload();
+            configurationMock.Setup(c => c.Value)
+                .Returns(new RollbarOptions { AccessToken = ACCESSTOKEN, Environment = ENVIRONMENT });
+            var configurationBuilder = new ConfigurationBuilder(configurationMock.Object);
+            var payload = new Payload();
             configurationBuilder.Execute(payload);
             Assert.Equal(ACCESSTOKEN, payload.AccessToken);
             Assert.Equal(ENVIRONMENT, payload.Data?.Environment);

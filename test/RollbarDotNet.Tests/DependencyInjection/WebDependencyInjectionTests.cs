@@ -1,13 +1,13 @@
 ﻿namespace RollbarDotNet.Tests.DependencyInjection
 {
+    using System;
+    using System.Threading.Tasks;
     using Configuration;
     using Core;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
     using Moq;
-    using System;
-    using System.Threading.Tasks;
     using Xunit;
 
     public class WebDependencyInjectionTests
@@ -17,8 +17,8 @@
             var mockHostingEnvironment = new Mock<IHostingEnvironment>();
             var services = new ServiceCollection();
             services.AddOptions()
-                    .AddRollbarWeb()
-                    .AddSingleton(mockHostingEnvironment.Object);
+                .AddRollbarWeb()
+                .AddSingleton(mockHostingEnvironment.Object);
             services.Configure<RollbarOptions>(o =>
             {
                 o.AccessToken = Environment.GetEnvironmentVariable("ROLLBAR_TOKEN");
@@ -37,24 +37,19 @@
         protected Rollbar Rollbar { get; set; }
 
         [Fact]
-        public async Task SucessfullyReportError()
+        public async Task DisabledRollbar()
         {
-            try
+            var options = this.ServiceProvider.GetService<IOptions<RollbarOptions>>().Value;
+            this.Services.Configure<RollbarOptions>(o =>
             {
-                try
-                {
-                    throw new Exception("Inner");
-                }
-                catch (Exception inner)
-                {
-                    throw new Exception("Test", inner);
-                }
-            }
-            catch(Exception exception)
-            {
-                var response = await this.Rollbar.SendException(exception);
-                Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
-            }
+                o.AccessToken = options.AccessToken;
+                o.Disabled = true;
+                o.Environment = options.Environment;
+            });
+            var serviceProvider = this.Services.BuildServiceProvider();
+            var rollbar = serviceProvider.GetService<Rollbar>();
+            var response = await rollbar.SendMessage(RollbarLevel.Debug, "Hello");
+            Assert.Null(response.Result.Uuid);
         }
 
         [Fact]
@@ -72,19 +67,24 @@
         }
 
         [Fact]
-        public async Task DisabledRollbar()
+        public async Task SucessfullyReportError()
         {
-            var options = this.ServiceProvider.GetService<IOptions<RollbarOptions>>().Value;
-            this.Services.Configure<RollbarOptions>(o =>
+            try
             {
-                o.AccessToken = options.AccessToken;
-                o.Disabled = true;
-                o.Environment = options.Environment;
-            });
-            var serviceProvider = this.Services.BuildServiceProvider();
-            var rollbar = serviceProvider.GetService<Rollbar>();
-            var response = await rollbar.SendMessage(RollbarLevel.Debug, "Hello");
-            Assert.Null(response.Result.Uuid);
+                try
+                {
+                    throw new Exception("Inner");
+                }
+                catch (Exception inner)
+                {
+                    throw new Exception("Test", inner);
+                }
+            }
+            catch (Exception exception)
+            {
+                var response = await this.Rollbar.SendException(exception);
+                Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
+            }
         }
     }
 }

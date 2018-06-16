@@ -52,6 +52,7 @@
             {
                 return frames;
             }
+
             foreach (var stackTraceFrame in stackTraceFrames)
             {
                 var method = stackTraceFrame.GetMethod();

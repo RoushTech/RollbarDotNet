@@ -4,16 +4,10 @@
 
     public class Configuration
     {
-        public JsonSerializerSettings JsonSettings
+        public JsonSerializerSettings JsonSettings => new JsonSerializerSettings
         {
-            get
-            {
-                return new JsonSerializerSettings
-                {
-                    Formatting = Formatting.Indented,
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-            }
-        }
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore
+        };
     }
 }
