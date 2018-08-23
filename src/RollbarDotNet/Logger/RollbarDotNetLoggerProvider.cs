@@ -5,6 +5,7 @@
     using Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
 
     public class RollbarDotNetLoggerProvider : ILoggerProvider
     {
@@ -26,8 +27,8 @@
         public ILogger CreateLogger(string categoryName)
         {
             var rollbar = this.ServiceProvider.GetRequiredService<Rollbar>();
-            var options = this.ServiceProvider.GetRequiredService<RollbarOptions>();
-            return this.Loggers.GetOrAdd(categoryName, name => new RollbarDotNetLogger(rollbar, options));
+            var options = this.ServiceProvider.GetRequiredService<IOptions<RollbarOptions>>();
+            return this.Loggers.GetOrAdd(categoryName, name => new RollbarDotNetLogger(rollbar, options.Value));
         }
     }
 }
