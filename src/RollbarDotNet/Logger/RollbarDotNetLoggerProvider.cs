@@ -27,8 +27,7 @@
         public ILogger CreateLogger(string categoryName)
         {
             var rollbar = this.ServiceProvider.GetRequiredService<Rollbar>();
-            var options = this.ServiceProvider.GetRequiredService<IOptions<RollbarOptions>>();
-            return this.Loggers.GetOrAdd(categoryName, name => new RollbarDotNetLogger(rollbar, options.Value));
+            return this.Loggers.GetOrAdd(categoryName, name => new RollbarDotNetLogger(rollbar));
         }
     }
 }

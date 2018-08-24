@@ -24,12 +24,12 @@
         }
 
 
-        public async Task<Response> SendException(Exception exception)
+        public virtual async Task<Response> SendException(Exception exception)
         {
             return await this.SendException(RollbarLevel.Error, exception);
         }
 
-        public async Task<Response> SendException(RollbarLevel level, Exception exception)
+        public virtual async Task<Response> SendException(RollbarLevel level, Exception exception)
         {
             var payload = this.SetupPayload(level);
             foreach (var exceptionBuilder in this.ExceptionBuilders)
@@ -40,12 +40,12 @@
             return await this.RollbarClient.Send(payload);
         }
 
-        public async Task<Response> SendMessage(string message)
+        public virtual async Task<Response> SendMessage(string message)
         {
             return await this.SendMessage(RollbarLevel.Info, message);
         }
 
-        public async Task<Response> SendMessage(RollbarLevel level, string message)
+        public virtual async Task<Response> SendMessage(RollbarLevel level, string message)
         {
             var payload = this.SetupPayload(level);
             payload.Data.Body.Message = new Message();

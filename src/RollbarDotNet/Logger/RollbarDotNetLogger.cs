@@ -8,21 +8,22 @@
     {
         protected Rollbar Rollbar { get; }
 
-        protected RollbarOptions RollbarOptions { get; }
-
-        public RollbarDotNetLogger(Rollbar rollbar, RollbarOptions rollbarOptions)
+        public RollbarDotNetLogger(Rollbar rollbar)
         {
             this.Rollbar = rollbar;
-            this.RollbarOptions = rollbarOptions;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
             Func<TState, Exception, string> formatter)
         {
+            var rollbarLogLevel = MapLogLevel(logLevel);
             if (exception != null)
             {
-                this.Rollbar.SendException(exception).Wait();
+                this.Rollbar.SendException(rollbarLogLevel, exception).Wait();
+                return;
             }
+
+            this.Rollbar.SendMessage(rollbarLogLevel, formatter(state, exception)).Wait();
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -33,6 +34,25 @@
         public IDisposable BeginScope<TState>(TState state)
         {
             return null;
+        }
+
+        private RollbarLevel MapLogLevel(LogLevel logLevel)
+        {
+            switch(logLevel)
+            {
+                case LogLevel.Debug:
+                    return RollbarLevel.Debug;
+                case LogLevel.Information:
+                    return RollbarLevel.Info;
+                case LogLevel.Warning:
+                    return RollbarLevel.Warning;
+                case LogLevel.Error:
+                    return RollbarLevel.Error;
+                case LogLevel.Critical:
+                    return RollbarLevel.Critical;
+                default:
+                    return RollbarLevel.Debug;
+            }
         }
     }
 }
