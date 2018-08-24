@@ -16,6 +16,9 @@
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
             Func<TState, Exception, string> formatter)
         {
+            if(logLevel == LogLevel.None)
+                return;
+
             var rollbarLogLevel = MapLogLevel(logLevel);
             if (exception != null)
             {
