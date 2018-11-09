@@ -8,5 +8,7 @@ plugins:
         enabled: false
       MD024:
         enabled: false
+      MD033:
+        enabled: false
   fixme:
     enabled: true

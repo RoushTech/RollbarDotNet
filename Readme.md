@@ -4,7 +4,7 @@
 [![Build](https://img.shields.io/teamcity/https/teamcity.roushtech.net/s/RollbarDotNet_Build.svg)]()
 [![Maintainability](https://api.codeclimate.com/v1/badges/0b51030e89b49ab252f3/maintainability)](https://codeclimate.com/github/RoushTech/RollbarDotNet/maintainability)
 
-Rollbar support for your .NET Core projects, relies on dependency injection and hooks up to your ASP.NET Core pipeline for easy 
+Rollbar support for your .NET Core projects, relies on dependency injection and hooks up to your ASP.NET Core pipeline for easy use.
 
 Inspired by RollbarSharp, great library, just required too many tweaks to make play with .NET core well in my opinion.
 
@@ -12,7 +12,7 @@ Inspired by RollbarSharp, great library, just required too many tweaks to make p
 
 Environment variables for testing:
 
- * ROLLBAR_TOKEN - Rollbar token for testing.
+- ROLLBAR_TOKEN - Rollbar token for testing.
 
 # Required services
 
@@ -104,10 +104,10 @@ var rollbar = new Rollbar(
         new EnvironmentBuilder(new SystemDateTime()), // SystemDateTime abstracts DateTime for mocking
         new NotifierBuilder()
     },
-	new IExceptionBuilder[] {
-		new ExceptionBuilder()
-	},
-	new RollBarClient(rollbarOptions)
+    new IExceptionBuilder[] {
+        new ExceptionBuilder()
+    },
+    new RollBarClient(rollbarOptions)
 );
 
 try
@@ -141,7 +141,7 @@ Inside of your appSettings.json you have two options, using plaintext or regular
   }
 ```
 
-Additional Blacklists can be coded by inheriting from the RollbarDotNet.Blacklisters.IBlacklister interface and registering it with your application's dependency injection framework. 
+Additional Blacklists can be coded by inheriting from the RollbarDotNet.Blacklisters.IBlacklister interface and registering it with your application's dependency injection framework.
 
 
 ## To do
@@ -154,7 +154,7 @@ As of writing this .NET Core does not support walking the stack frames of the ex
 
 As far as I know log4net is _currently_ implementing .NET Core support.
 
-### Break out into seperate libraries?
+### Break out into separate libraries
 
 .NET Core is all about keeping things slim, do we put ASPNETCore code in a different lib?
 
