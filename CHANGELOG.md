@@ -27,32 +27,32 @@
 ## Features
 <sup>Released: 2017/8/20</sup>
 
- - Upgrade to VS2017/CSProj.
- - Add trace frame support.
- - Also target NetStandard2.0
+- Upgrade to VS2017/CSProj.
+- Add trace frame support.
+- Also target NetStandard2.0
 
 # 0.5.2
 <sup>Released: 2017/4/21</sup>
 
 ## Features
 
- - Updated documentation. #49
- - Can now disable Rollbar from configuration. #48
+- Updated documentation. #49
+- Can now disable Rollbar from configuration. #48
 
 ## Bug Fixes
 
- - Fix issue with trying to access Request.Form variables during POSTs that may not actually support form variables. #54
+- Fix issue with trying to access Request.Form variables during POSTs that may not actually support form variables. #54
 
 # 0.5.1
 <sup>Released: 2017/3/10</sup>
 
 ## Features
 
- - More robust testing of sending exceptions to Rollbar (see readme.md for instructions on configuring token for testing).
+- More robust testing of sending exceptions to Rollbar (see readme.md for instructions on configuring token for testing).
 
 ## Bug Fixes
 
- - Fixed issue sending Rollbar exceptions.
+- Fixed issue sending Rollbar exceptions.
 
 # 0.5.0
 <sup>Released: 2017/2/26</sup>
