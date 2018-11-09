@@ -4,6 +4,8 @@ plugins:
   markdownlint:
     enabled: true
     checks:
+      MD013:
+        enabled: false
       MD024:
         enabled: false
   fixme:
