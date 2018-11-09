@@ -26,7 +26,7 @@
                 return;
             }
 
-            this.Rollbar.SendMessage(rollbarLogLevel, formatter(state, exception)).Wait();
+            this.Rollbar.SendMessage(rollbarLogLevel, formatter(state, null)).Wait();
         }
 
         public bool IsEnabled(LogLevel logLevel)
