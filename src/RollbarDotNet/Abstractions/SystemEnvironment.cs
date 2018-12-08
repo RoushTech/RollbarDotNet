@@ -4,6 +4,6 @@
 
     public class SystemEnvironment : IEnvironment
     {
-        public string MachineName {  get { return Environment.MachineName; } }
+        public string MachineName => Environment.MachineName;
     }
 }

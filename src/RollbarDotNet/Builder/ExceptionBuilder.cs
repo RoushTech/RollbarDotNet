@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Payloads;
     using Exception = System.Exception;
@@ -21,7 +20,7 @@
                 throw new ArgumentNullException(nameof(exception));
             }
 
-            var traceChain = new List<Payloads.Trace>();
+            var traceChain = new List<Trace>();
             this.BuildTraceList(exception, traceChain);
             if (traceChain.Count > 0)
             {
@@ -29,11 +28,13 @@
             }
         }
 
-        protected void BuildTraceList(Exception exception, List<Payloads.Trace> traceList)
+        protected void BuildTraceList(Exception exception, List<Trace> traceList)
         {
-            var trace = new Payloads.Trace();
-            trace.Exception = this.BuildException(exception);
-            trace.Frames = this.BuildFrames(exception);
+            var trace = new Trace
+            {
+                Exception = this.BuildException(exception),
+                Frames = this.BuildFrames(exception)
+            };
             traceList.Add(trace);
             if (exception.InnerException != null)
             {
@@ -44,12 +45,13 @@
         protected List<Frame> BuildFrames(Exception exception)
         {
             var frames = new List<Frame>();
-            var stacktrace = new StackTrace(exception, true);
+            var stacktrace = new System.Diagnostics.StackTrace(exception, true);
             var stackTraceFrames = stacktrace.GetFrames();
             if (stackTraceFrames == null)
             {
                 return frames;
             }
+
             foreach (var stackTraceFrame in stackTraceFrames)
             {
                 var method = stackTraceFrame.GetMethod();

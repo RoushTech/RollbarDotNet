@@ -4,8 +4,7 @@
 
     public class BlacklistConfiguration
     {
-        public virtual List<string> Text { get; set; }
-
         public virtual List<string> Regex { get; set; }
+        public virtual List<string> Text { get; set; }
     }
 }

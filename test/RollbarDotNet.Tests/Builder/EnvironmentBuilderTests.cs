@@ -1,10 +1,10 @@
 ﻿namespace RollbarDotNet.Tests.Builder
 {
+    using System;
     using Abstractions;
     using Moq;
     using Payloads;
     using RollbarDotNet.Builder;
-    using System;
     using Xunit;
 
     public class EnvironmentBuilderTests

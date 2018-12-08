@@ -15,7 +15,7 @@
             this.Payload = Encoding.UTF8.GetBytes(json);
         }
 
-        protected async override Task SerializeToStreamAsync(Stream stream, TransportContext context)
+        protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             await stream.WriteAsync(this.Payload, 0, this.Payload.Length);
         }

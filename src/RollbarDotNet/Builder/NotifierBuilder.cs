@@ -1,8 +1,8 @@
 ﻿namespace RollbarDotNet.Builder
 {
-    using Payloads;
-    using System.Reflection;
     using System.Diagnostics;
+    using System.Reflection;
+    using Payloads;
 
     public class NotifierBuilder : IBuilder
     {
@@ -10,7 +10,8 @@
         {
             payload.Data.Notifier = new Notifier();
             payload.Data.Notifier.Name = "RollbarDotNet";
-            var version = FileVersionInfo.GetVersionInfo(typeof(Rollbar).GetTypeInfo().Assembly.Location).ProductVersion;
+            var version = FileVersionInfo.GetVersionInfo(typeof(Rollbar).GetTypeInfo().Assembly.Location)
+                .ProductVersion;
             payload.Data.Notifier.Version = version;
         }
     }

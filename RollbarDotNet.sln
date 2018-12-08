@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGELOG.md = CHANGELOG.md
 		LICENSE.txt = LICENSE.txt
 		Readme.md = Readme.md
+		.codeclimate.yml = .codeclimate.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RollbarDotNet", "src\RollbarDotNet\RollbarDotNet.csproj", "{6CF5EF94-87E9-4436-AA9B-072C86B7E572}"

@@ -1,35 +1,35 @@
 ﻿namespace RollbarDotNet.Builder
 {
+    using System;
+    using System.Collections.Generic;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Features;
     using Payloads;
-    using System;
-    using System.Collections.Generic;
 
     public class RequestBuilder : IBuilder
     {
+        protected IBlacklistCollection BlacklistCollection { get; }
+
+        protected IHttpContextAccessor ContextAccessor { get; }
+
         public RequestBuilder(
             IBlacklistCollection blacklistCollection,
             IHttpContextAccessor contextAccessor)
         {
             this.BlacklistCollection = blacklistCollection;
-            this.contextAccessor = contextAccessor;
+            this.ContextAccessor = contextAccessor;
         }
-
-        protected IBlacklistCollection BlacklistCollection { get; set; }
-
-        protected readonly IHttpContextAccessor contextAccessor;
 
         public void Execute(Payload payload)
         {
             payload.Data.Request = new Request();
             this.BuildRequest(payload.Data.Request);
         }
-        
+
         protected void BuildRequest(Request request)
         {
-            var context = this.contextAccessor.HttpContext;
-            if(context == null)
+            var context = this.ContextAccessor.HttpContext;
+            if (context == null)
             {
                 return;
             }
@@ -45,7 +45,7 @@
                 request.Get = this.QueryToDictionary(context.Request.Query);
             }
             else if (context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase)
-                && context.Request.HasFormContentType)
+                     && context.Request.HasFormContentType)
             {
                 request.Post = this.FormToDictionary(context.Request.Form);
             }
@@ -58,20 +58,20 @@
 
         protected string QueryStringBreakdown(string queryString)
         {
-            if(queryString.Length == 0)
+            if (queryString.Length == 0)
             {
                 return queryString;
             }
 
-            bool questionMarkRemoved = false;
+            var questionMarkRemoved = false;
             if (queryString[0] == '?')
             {
                 questionMarkRemoved = true;
                 queryString = queryString.Substring(1, queryString.Length - 1);
             }
-            
+
             var parameters = queryString.Split('&');
-            for(var i = 0; i < parameters.Length; i++)
+            for (var i = 0; i < parameters.Length; i++)
             {
                 var keyValue = parameters[i].Split('=');
                 if (keyValue.Length != 2)
@@ -104,7 +104,7 @@
             var dictionary = new Dictionary<string, string>();
             foreach (var form in formCollection)
             {
-                dictionary.Add(form.Key, this.BlacklistCollection.Check(form.Key) ? "**********" : (string)form.Value);
+                dictionary.Add(form.Key, this.BlacklistCollection.Check(form.Key) ? "**********" : (string) form.Value);
             }
 
             return dictionary.Count == 0 ? null : dictionary;
@@ -115,7 +115,8 @@
             var dictionary = new Dictionary<string, string>();
             foreach (var query in queryCollection)
             {
-                dictionary.Add(query.Key, this.BlacklistCollection.Check(query.Key) ? "**********" : (string)query.Value);
+                dictionary.Add(query.Key,
+                    this.BlacklistCollection.Check(query.Key) ? "**********" : (string) query.Value);
             }
 
             return dictionary.Count == 0 ? null : dictionary;
@@ -124,9 +125,10 @@
         protected Dictionary<string, string> HeadersToDictionary(IHeaderDictionary headerDictionary)
         {
             var dictionary = new Dictionary<string, string>();
-            foreach(var header in headerDictionary)
+            foreach (var header in headerDictionary)
             {
-                dictionary.Add(header.Key, this.BlacklistCollection.Check(header.Key) ? "**********" : (string)header.Value);
+                dictionary.Add(header.Key,
+                    this.BlacklistCollection.Check(header.Key) ? "**********" : (string) header.Value);
             }
 
             return dictionary.Count == 0 ? null : dictionary;

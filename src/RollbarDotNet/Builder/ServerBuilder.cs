@@ -6,6 +6,10 @@
 
     public class ServerBuilder : IBuilder
     {
+        protected IEnvironment Environment { get; }
+
+        protected IHostingEnvironment HostingEnvironment { get; }
+
         public ServerBuilder(
             IEnvironment environment,
             IHostingEnvironment hostingEnvironment)
@@ -13,10 +17,6 @@
             this.Environment = environment;
             this.HostingEnvironment = hostingEnvironment;
         }
-
-        protected IEnvironment Environment { get; set; }
-
-        protected IHostingEnvironment HostingEnvironment { get; set; }
 
         public void Execute(Payload payload)
         {
