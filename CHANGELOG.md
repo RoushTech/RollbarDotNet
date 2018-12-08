@@ -1,6 +1,6 @@
 ﻿# 0.7.0
 
-- Added logger.
+- Added ILogger support.
 
 # 0.6.4
 
