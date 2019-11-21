@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\RollbarDotNet\RollbarDotNet.csproj" />
+    <ProjectReference Include="..\RollbarDotNet\RollbarDotNet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
