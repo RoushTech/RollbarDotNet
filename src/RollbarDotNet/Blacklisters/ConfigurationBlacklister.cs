@@ -16,19 +16,19 @@
 
         public ConfigurationBlacklister(IOptions<RollbarOptions> config)
         {
-            this.Configuration = config?.Value?.Blacklist;
-            this.RegexChecks = new List<Regex>();
-            this.StringChecks = new List<string>();
-            if (this.Configuration != null)
+            Configuration = config?.Value?.Blacklist;
+            RegexChecks = new List<Regex>();
+            StringChecks = new List<string>();
+            if (Configuration != null)
             {
-                this.Configuration.Regex?.ForEach(r => this.RegexChecks.Add(new Regex(r)));
-                this.Configuration.Text?.ForEach(t => this.StringChecks.Add(t));
+                Configuration.Regex?.ForEach(r => RegexChecks.Add(new Regex(r)));
+                Configuration.Text?.ForEach(t => StringChecks.Add(t));
             }
         }
 
         public bool Check(string name)
         {
-            return this.RegexChecks.Any(c => c.IsMatch(name)) || this.StringChecks.Any(c => c == name);
+            return RegexChecks.Any(c => c.IsMatch(name)) || StringChecks.Any(c => c == name);
         }
     }
 }

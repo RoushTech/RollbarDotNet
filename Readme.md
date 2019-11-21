@@ -80,12 +80,12 @@ You can also post messages/exceptions directly if you so wish.
 
 ``` csharp
 // Send an exception
-var response = await this.Rollbar.SendException(exception);
+var response = await Rollbar.SendException(exception);
 response.Uuid //Event UUID that can be looked up on the rollbar site.
 
 
 // Send a message
-var response = await this.Rollbar.SendMessage("Hello World!", RollbarLevels.Message);
+var response = await Rollbar.SendMessage("Hello World!", RollbarLevels.Message);
 ```
 
 # Calling Without Dependency Injection

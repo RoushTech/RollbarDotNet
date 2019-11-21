@@ -14,8 +14,8 @@
 
         public Trace()
         {
-            this.Frames = new List<Frame>();
-            this.Exception = new Exception();
+            Frames = new List<Frame>();
+            Exception = new Exception();
         }
     }
 }

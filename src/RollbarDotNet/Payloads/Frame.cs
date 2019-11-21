@@ -38,8 +38,8 @@
 
         public Frame()
         {
-            this.Context = new TraceContext();
-            this.Locals = new Dictionary<string, object>();
+            Context = new TraceContext();
+            Locals = new Dictionary<string, object>();
         }
     }
 }

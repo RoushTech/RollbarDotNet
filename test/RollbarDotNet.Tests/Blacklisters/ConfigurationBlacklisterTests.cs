@@ -26,28 +26,28 @@
         [Fact]
         public void RegexFail()
         {
-            var configurationBlacklister = this.Setup();
+            var configurationBlacklister = Setup();
             Assert.Equal(false, configurationBlacklister.Check("regexfail"));
         }
 
         [Fact]
         public void RegexPass()
         {
-            var configurationBlacklister = this.Setup();
+            var configurationBlacklister = Setup();
             Assert.Equal(true, configurationBlacklister.Check("regex"));
         }
 
         [Fact]
         public void StringFail()
         {
-            var configurationBlacklister = this.Setup();
+            var configurationBlacklister = Setup();
             Assert.Equal(false, configurationBlacklister.Check("testa"));
         }
 
         [Fact]
         public void StringPass()
         {
-            var configurationBlacklister = this.Setup();
+            var configurationBlacklister = Setup();
             Assert.Equal(true, configurationBlacklister.Check("test"));
         }
     }

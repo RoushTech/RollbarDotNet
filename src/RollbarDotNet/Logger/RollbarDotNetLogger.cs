@@ -10,23 +10,23 @@
 
         public RollbarDotNetLogger(Rollbar rollbar)
         {
-            this.Rollbar = rollbar;
+            Rollbar = rollbar;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
             Func<TState, Exception, string> formatter)
         {
-            if(logLevel == LogLevel.None)
+            if (logLevel == LogLevel.None)
                 return;
 
             var rollbarLogLevel = MapLogLevel(logLevel);
             if (exception != null)
             {
-                this.Rollbar.SendException(rollbarLogLevel, exception).Wait();
+                Rollbar.SendException(rollbarLogLevel, exception).Wait();
                 return;
             }
 
-            this.Rollbar.SendMessage(rollbarLogLevel, formatter(state, null)).Wait();
+            Rollbar.SendMessage(rollbarLogLevel, formatter(state, null)).Wait();
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -41,7 +41,7 @@
 
         private RollbarLevel MapLogLevel(LogLevel logLevel)
         {
-            switch(logLevel)
+            switch (logLevel)
             {
                 case LogLevel.Debug:
                     return RollbarLevel.Debug;

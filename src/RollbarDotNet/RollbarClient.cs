@@ -19,13 +19,13 @@
 
         public RollbarClient(IOptions<RollbarOptions> rollbarOptions)
         {
-            this.Configuration = new Configuration.Configuration();
-            this.RollbarOptions = rollbarOptions.Value;
+            Configuration = new Configuration.Configuration();
+            RollbarOptions = rollbarOptions.Value;
         }
 
         public async Task<Response> Send(Payload payload)
         {
-            if (this.RollbarOptions.Disabled)
+            if (RollbarOptions.Disabled)
             {
                 return new Response
                 {
@@ -36,12 +36,12 @@
                 };
             }
 
-            var json = this.Serialize(payload);
+            var json = Serialize(payload);
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await httpClient.PostAsync(this.RollbarUri, new JsonHttpContentSerializer(json));
+                var response = await httpClient.PostAsync(RollbarUri, new JsonHttpContentSerializer(json));
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException(response.ToString());
@@ -54,7 +54,7 @@
 
         protected string Serialize(Payload payload)
         {
-            return JsonConvert.SerializeObject(payload, this.Configuration.JsonSettings);
+            return JsonConvert.SerializeObject(payload, Configuration.JsonSettings);
         }
     }
 }

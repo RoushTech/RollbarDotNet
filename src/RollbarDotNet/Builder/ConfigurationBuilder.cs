@@ -11,13 +11,13 @@
 
         public ConfigurationBuilder(IOptions<RollbarOptions> configuration)
         {
-            this.Configuration = configuration.Value;
+            Configuration = configuration.Value;
         }
 
         public void Execute(Payload payload)
         {
-            payload.AccessToken = this.Configuration.AccessToken;
-            payload.Data.Environment = this.Configuration.Environment;
+            payload.AccessToken = Configuration.AccessToken;
+            payload.Data.Environment = Configuration.Environment;
 
             if (string.IsNullOrEmpty(payload.AccessToken))
             {

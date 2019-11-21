@@ -21,7 +21,7 @@
             }
 
             var traceChain = new List<Trace>();
-            this.BuildTraceList(exception, traceChain);
+            BuildTraceList(exception, traceChain);
             if (traceChain.Count > 0)
             {
                 payload.Data.Body.TraceChain = traceChain;
@@ -32,13 +32,13 @@
         {
             var trace = new Trace
             {
-                Exception = this.BuildException(exception),
-                Frames = this.BuildFrames(exception)
+                Exception = BuildException(exception),
+                Frames = BuildFrames(exception)
             };
             traceList.Add(trace);
             if (exception.InnerException != null)
             {
-                this.BuildTraceList(exception.InnerException, traceList);
+                BuildTraceList(exception.InnerException, traceList);
             }
         }
 
@@ -74,7 +74,7 @@
 
             if (exception.InnerException != null)
             {
-                frames.AddRange(this.BuildFrames(exception.InnerException));
+                frames.AddRange(BuildFrames(exception.InnerException));
             }
 
             return frames;

@@ -16,19 +16,19 @@
             IBlacklistCollection blacklistCollection,
             IHttpContextAccessor contextAccessor)
         {
-            this.BlacklistCollection = blacklistCollection;
-            this.ContextAccessor = contextAccessor;
+            BlacklistCollection = blacklistCollection;
+            ContextAccessor = contextAccessor;
         }
 
         public void Execute(Payload payload)
         {
             payload.Data.Request = new Request();
-            this.BuildRequest(payload.Data.Request);
+            BuildRequest(payload.Data.Request);
         }
 
         protected void BuildRequest(Request request)
         {
-            var context = this.ContextAccessor.HttpContext;
+            var context = ContextAccessor.HttpContext;
             if (context == null)
             {
                 return;
@@ -36,23 +36,23 @@
 
             request.Url = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.Path}";
             request.Method = context.Request.Method.ToUpper();
-            request.Headers = this.HeadersToDictionary(context.Request.Headers);
+            request.Headers = HeadersToDictionary(context.Request.Headers);
             request.UserIp = context.Features.Get<IHttpConnectionFeature>().RemoteIpAddress.ToString();
-            request.Cookies = this.CookiesToDictionary(context.Request.Cookies);
+            request.Cookies = CookiesToDictionary(context.Request.Cookies);
 
             if (context.Request.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
             {
-                request.Get = this.QueryToDictionary(context.Request.Query);
+                request.Get = QueryToDictionary(context.Request.Query);
             }
             else if (context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase)
                      && context.Request.HasFormContentType)
             {
-                request.Post = this.FormToDictionary(context.Request.Form);
+                request.Post = FormToDictionary(context.Request.Form);
             }
 
             if (context.Request.QueryString.HasValue)
             {
-                request.QueryString = this.QueryStringBreakdown(context.Request.QueryString.Value);
+                request.QueryString = QueryStringBreakdown(context.Request.QueryString.Value);
             }
         }
 
@@ -80,7 +80,7 @@
                 }
 
                 var tempString = keyValue[0] + "=";
-                tempString += this.BlacklistCollection.Check(keyValue[0]) ? "**********" : keyValue[1];
+                tempString += BlacklistCollection.Check(keyValue[0]) ? "**********" : keyValue[1];
                 parameters[i] = tempString;
             }
 
@@ -93,7 +93,7 @@
             var dictionary = new Dictionary<string, string>();
             foreach (var cookie in cookieCollection)
             {
-                dictionary.Add(cookie.Key, this.BlacklistCollection.Check(cookie.Key) ? "**********" : cookie.Value);
+                dictionary.Add(cookie.Key, BlacklistCollection.Check(cookie.Key) ? "**********" : cookie.Value);
             }
 
             return dictionary.Count == 0 ? null : dictionary;
@@ -104,7 +104,7 @@
             var dictionary = new Dictionary<string, string>();
             foreach (var form in formCollection)
             {
-                dictionary.Add(form.Key, this.BlacklistCollection.Check(form.Key) ? "**********" : (string) form.Value);
+                dictionary.Add(form.Key, BlacklistCollection.Check(form.Key) ? "**********" : (string)form.Value);
             }
 
             return dictionary.Count == 0 ? null : dictionary;
@@ -116,7 +116,7 @@
             foreach (var query in queryCollection)
             {
                 dictionary.Add(query.Key,
-                    this.BlacklistCollection.Check(query.Key) ? "**********" : (string) query.Value);
+                    BlacklistCollection.Check(query.Key) ? "**********" : (string)query.Value);
             }
 
             return dictionary.Count == 0 ? null : dictionary;
@@ -128,7 +128,7 @@
             foreach (var header in headerDictionary)
             {
                 dictionary.Add(header.Key,
-                    this.BlacklistCollection.Check(header.Key) ? "**********" : (string) header.Value);
+                    BlacklistCollection.Check(header.Key) ? "**********" : (string)header.Value);
             }
 
             return dictionary.Count == 0 ? null : dictionary;

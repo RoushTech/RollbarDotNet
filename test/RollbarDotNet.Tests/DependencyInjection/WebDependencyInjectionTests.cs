@@ -25,9 +25,9 @@
                 o.Environment = "Testing";
             });
 
-            this.Services = services;
-            this.ServiceProvider = this.Services.BuildServiceProvider();
-            this.Rollbar = this.ServiceProvider.GetService<Rollbar>();
+            Services = services;
+            ServiceProvider = Services.BuildServiceProvider();
+            Rollbar = ServiceProvider.GetService<Rollbar>();
         }
 
         protected IServiceCollection Services { get; set; }
@@ -39,14 +39,14 @@
         [Fact]
         public async Task DisabledRollbar()
         {
-            var options = this.ServiceProvider.GetService<IOptions<RollbarOptions>>().Value;
-            this.Services.Configure<RollbarOptions>(o =>
+            var options = ServiceProvider.GetService<IOptions<RollbarOptions>>().Value;
+            Services.Configure<RollbarOptions>(o =>
             {
                 o.AccessToken = options.AccessToken;
                 o.Disabled = true;
                 o.Environment = options.Environment;
             });
-            var serviceProvider = this.Services.BuildServiceProvider();
+            var serviceProvider = Services.BuildServiceProvider();
             var rollbar = serviceProvider.GetService<Rollbar>();
             var response = await rollbar.SendMessage(RollbarLevel.Debug, "Hello");
             Assert.Null(response.Result.Uuid);
@@ -55,14 +55,14 @@
         [Fact]
         public async Task SuccessfullyReportMessage()
         {
-            var response = await this.Rollbar.SendMessage("Hello");
+            var response = await Rollbar.SendMessage("Hello");
             Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
         }
 
         [Fact]
         public async Task SuccessfullyReportMessageWithLevel()
         {
-            var response = await this.Rollbar.SendMessage(RollbarLevel.Debug, "Hello");
+            var response = await Rollbar.SendMessage(RollbarLevel.Debug, "Hello");
             Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
         }
 
@@ -82,7 +82,7 @@
             }
             catch (Exception exception)
             {
-                var response = await this.Rollbar.SendException(exception);
+                var response = await Rollbar.SendException(exception);
                 Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
             }
         }

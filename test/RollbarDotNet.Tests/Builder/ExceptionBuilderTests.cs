@@ -12,8 +12,8 @@
     {
         public ExceptionBuilderTests()
         {
-            this.ExceptionBuilder = new ExceptionBuilder();
-            this.Payload = new Payload();
+            ExceptionBuilder = new ExceptionBuilder();
+            Payload = new Payload();
         }
 
         protected ExceptionBuilder ExceptionBuilder { get; set; }
@@ -49,8 +49,8 @@
             }
             catch (Exception exception)
             {
-                this.ExceptionBuilder.Execute(this.Payload, exception);
-                var body = this.Payload.Data?.Body;
+                ExceptionBuilder.Execute(Payload, exception);
+                var body = Payload.Data?.Body;
                 Assert.NotNull(body?.TraceChain);
                 var first = body.TraceChain.First();
                 Assert.Equal("Exception", first.Exception?.Class);
@@ -65,7 +65,7 @@
         [Fact]
         public void ExceptionCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => this.ExceptionBuilder.Execute(this.Payload, null));
+            Assert.Throws<ArgumentNullException>(() => ExceptionBuilder.Execute(Payload, null));
         }
 
         [Fact]
@@ -77,7 +77,7 @@
             }
             catch (Exception exception)
             {
-                Assert.Throws<ArgumentNullException>(() => this.ExceptionBuilder.Execute(null, exception));
+                Assert.Throws<ArgumentNullException>(() => ExceptionBuilder.Execute(null, exception));
             }
         }
 
@@ -86,12 +86,12 @@
         {
             try
             {
-                this.ThrowException("", 0);
+                ThrowException("", 0);
             }
             catch (Exception exception)
             {
-                this.ExceptionBuilder.Execute(this.Payload, exception);
-                var payload = this.Payload.Data?.Body?.TraceChain?.FirstOrDefault();
+                ExceptionBuilder.Execute(Payload, exception);
+                var payload = Payload.Data?.Body?.TraceChain?.FirstOrDefault();
                 Assert.Equal("Exception", payload?.Exception?.Class);
                 Assert.Equal("test exception", payload?.Exception?.Message);
                 Assert.True(payload?.Frames?.Count == 2);

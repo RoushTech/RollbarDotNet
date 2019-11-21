@@ -62,7 +62,7 @@
 
         public Data()
         {
-            this.Body = new Body();
+            Body = new Body();
         }
     }
 }

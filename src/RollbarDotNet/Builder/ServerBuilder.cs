@@ -14,20 +14,20 @@
             IEnvironment environment,
             IHostingEnvironment hostingEnvironment)
         {
-            this.Environment = environment;
-            this.HostingEnvironment = hostingEnvironment;
+            Environment = environment;
+            HostingEnvironment = hostingEnvironment;
         }
 
         public void Execute(Payload payload)
         {
             payload.Data.Server = new Server();
-            this.BuildServer(payload.Data.Server);
+            BuildServer(payload.Data.Server);
         }
 
         private void BuildServer(Server server)
         {
-            server.Host = this.Environment.MachineName;
-            server.Root = this.HostingEnvironment.WebRootPath;
+            server.Host = Environment.MachineName;
+            server.Root = HostingEnvironment.WebRootPath;
         }
     }
 }

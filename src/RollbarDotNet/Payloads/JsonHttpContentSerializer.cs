@@ -12,17 +12,17 @@
 
         public JsonHttpContentSerializer(string json)
         {
-            this.Payload = Encoding.UTF8.GetBytes(json);
+            Payload = Encoding.UTF8.GetBytes(json);
         }
 
         protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
-            await stream.WriteAsync(this.Payload, 0, this.Payload.Length);
+            await stream.WriteAsync(Payload, 0, Payload.Length);
         }
 
         protected override bool TryComputeLength(out long length)
         {
-            length = this.Payload.Length;
+            length = Payload.Length;
             return true;
         }
     }

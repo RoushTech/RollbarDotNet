@@ -28,11 +28,11 @@
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.Method).Returns(method);
             httpContextAccessorMock.Setup(h => h.HttpContext.Features.Get<IHttpConnectionFeature>().RemoteIpAddress)
                 .Returns(IPAddress.Loopback);
-            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Headers).Returns(this.GenerateHeaderDictionary);
-            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Query).Returns(this.GenerateQueryCollection);
+            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Headers).Returns(GenerateHeaderDictionary);
+            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Query).Returns(GenerateQueryCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.HasFormContentType).Returns(true);
-            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Form).Returns(this.GenerateFormCollection);
-            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Cookies).Returns(this.GenerateCookieCollection);
+            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Form).Returns(GenerateFormCollection);
+            httpContextAccessorMock.Setup(h => h.HttpContext.Request.Cookies).Returns(GenerateCookieCollection);
             httpContextAccessorMock.Setup(h => h.HttpContext.Request.QueryString)
                 .Returns(new QueryString("?query=test&blacklist=here"));
             return httpContextAccessorMock;
@@ -48,8 +48,8 @@
 
         protected Payload GeneratePayload(bool enableBlacklist = false, string method = "GET")
         {
-            var requestBuilder = new RequestBuilder(this.GenerateBacklistCollection(enableBlacklist),
-                this.CreateIHttpContextAccessor(method).Object);
+            var requestBuilder = new RequestBuilder(GenerateBacklistCollection(enableBlacklist),
+                CreateIHttpContextAccessor(method).Object);
             var payload = new Payload();
             requestBuilder.Execute(payload);
             return payload;
@@ -60,7 +60,7 @@
             var headerDictionaryMock = new Mock<IHeaderDictionary>();
             headerDictionaryMock
                 .Setup(h => h.GetEnumerator())
-                .Returns(this.GenerateStringValueEnumerator());
+                .Returns(GenerateStringValueEnumerator());
             return headerDictionaryMock.Object;
         }
 
@@ -68,7 +68,7 @@
         {
             var cookieCollectionMock = new Mock<IRequestCookieCollection>();
             cookieCollectionMock.Setup(h => h.GetEnumerator())
-                .Returns(this.GenerateStringEnumerator());
+                .Returns(GenerateStringEnumerator());
             return cookieCollectionMock.Object;
         }
 
@@ -76,7 +76,7 @@
         {
             var queryCollectionMock = new Mock<IQueryCollection>();
             queryCollectionMock.Setup(h => h.GetEnumerator())
-                .Returns(this.GenerateStringValueEnumerator());
+                .Returns(GenerateStringValueEnumerator());
             return queryCollectionMock.Object;
         }
 
@@ -84,7 +84,7 @@
         {
             var formCollectionMock = new Mock<IFormCollection>();
             formCollectionMock.Setup(h => h.GetEnumerator())
-                .Returns(this.GenerateStringValueEnumerator());
+                .Returns(GenerateStringValueEnumerator());
             return formCollectionMock.Object;
         }
 
@@ -109,7 +109,7 @@
         [Fact]
         public void Blacklists_Payload_Cookies()
         {
-            var cookies = this.GeneratePayload(true)?.Data?.Request?.Cookies;
+            var cookies = GeneratePayload(true)?.Data?.Request?.Cookies;
             Assert.True(cookies.ContainsKey("blacklist"));
             Assert.Equal("**********", cookies["blacklist"]);
         }
@@ -117,7 +117,7 @@
         [Fact]
         public void Blacklists_Payload_Headers()
         {
-            var headers = this.GeneratePayload(true)?.Data?.Request?.Headers;
+            var headers = GeneratePayload(true)?.Data?.Request?.Headers;
             Assert.True(headers.ContainsKey("blacklist"));
             Assert.Equal("**********", headers["blacklist"]);
         }
@@ -125,7 +125,7 @@
         [Fact]
         public void Blacklists_Payload_Query_Get()
         {
-            var query = this.GeneratePayload(true)?.Data?.Request?.Get;
+            var query = GeneratePayload(true)?.Data?.Request?.Get;
             Assert.True(query.ContainsKey("blacklist"));
             Assert.Equal("**********", query["blacklist"]);
         }
@@ -133,7 +133,7 @@
         [Fact]
         public void Blacklists_Payload_Query_Post()
         {
-            var query = this.GeneratePayload(true, "POST")?.Data?.Request?.Post;
+            var query = GeneratePayload(true, "POST")?.Data?.Request?.Post;
             Assert.True(query.ContainsKey("blacklist"));
             Assert.Equal("**********", query["blacklist"]);
         }
@@ -141,7 +141,7 @@
         [Fact]
         public void Blacklists_Payload_QueryString()
         {
-            var queryString = this.GeneratePayload(true)?.Data?.Request?.QueryString;
+            var queryString = GeneratePayload(true)?.Data?.Request?.QueryString;
             Assert.Equal("?query=test&blacklist=**********", queryString);
         }
 
@@ -153,11 +153,11 @@
         [Fact]
         public void Bug_ThrowsIncorrectContentType()
         {
-            var mock = this.CreateIHttpContextAccessor("POST");
+            var mock = CreateIHttpContextAccessor("POST");
             mock.Setup(h => h.HttpContext.Request.HasFormContentType).Returns(false);
             mock.Setup(h => h.HttpContext.Request.Form)
                 .Throws(new InvalidOperationException("Incorrect Content-Type: application/json; charset=UTF-8"));
-            var requestBuilder = new RequestBuilder(this.GenerateBacklistCollection(), mock.Object);
+            var requestBuilder = new RequestBuilder(GenerateBacklistCollection(), mock.Object);
             var payload = new Payload();
             requestBuilder.Execute(payload);
         }
@@ -165,56 +165,56 @@
         [Fact]
         public void Builds_Payload_Cookies()
         {
-            var query = this.GeneratePayload()?.Data?.Request?.Cookies;
-            Assert.Equal(this.DefaultDictionary, query);
+            var query = GeneratePayload()?.Data?.Request?.Cookies;
+            Assert.Equal(DefaultDictionary, query);
         }
 
         [Fact]
         public void Builds_Payload_Headers()
         {
-            var headers = this.GeneratePayload()?.Data?.Request?.Headers;
-            Assert.Equal(this.DefaultDictionary, headers);
+            var headers = GeneratePayload()?.Data?.Request?.Headers;
+            Assert.Equal(DefaultDictionary, headers);
         }
 
         [Fact]
         public void Builds_Payload_Method()
         {
-            var payload = this.GeneratePayload();
+            var payload = GeneratePayload();
             Assert.Equal("GET", payload.Data?.Request?.Method);
         }
 
         [Fact]
         public void Builds_Payload_Query_Get()
         {
-            var query = this.GeneratePayload()?.Data?.Request?.Get;
-            Assert.Equal(this.DefaultDictionary, query);
+            var query = GeneratePayload()?.Data?.Request?.Get;
+            Assert.Equal(DefaultDictionary, query);
         }
 
         [Fact]
         public void Builds_Payload_Query_Post()
         {
-            var query = this.GeneratePayload(false, "POST")?.Data?.Request?.Post;
-            Assert.Equal(this.DefaultDictionary, query);
+            var query = GeneratePayload(false, "POST")?.Data?.Request?.Post;
+            Assert.Equal(DefaultDictionary, query);
         }
 
         [Fact]
         public void Builds_Payload_QueryString()
         {
-            var queryString = this.GeneratePayload()?.Data?.Request?.QueryString;
+            var queryString = GeneratePayload()?.Data?.Request?.QueryString;
             Assert.Equal("?query=test&blacklist=here", queryString);
         }
 
         [Fact]
         public void Builds_Payload_Url()
         {
-            var payload = this.GeneratePayload();
+            var payload = GeneratePayload();
             Assert.Equal("http://my.test.domain/request/url/here.txt", payload.Data?.Request?.Url);
         }
 
         [Fact]
         public void Builds_Payload_UserIp()
         {
-            var payload = this.GeneratePayload();
+            var payload = GeneratePayload();
             Assert.Equal(IPAddress.Loopback.ToString(), payload.Data?.Request?.UserIp);
         }
     }

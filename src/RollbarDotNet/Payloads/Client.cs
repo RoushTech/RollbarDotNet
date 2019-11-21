@@ -11,7 +11,7 @@
 
         public Client()
         {
-            this.Keys = new Dictionary<string, object>();
+            Keys = new Dictionary<string, object>();
         }
     }
 }

@@ -17,10 +17,10 @@ namespace RollbarDotNet.Tests.Logger
     {
         public RollbarDotNetLoggerTests()
         {
-            this.RollbarMock = new Mock<Rollbar>(null, null, null);
-            this.RollbarMock.Setup(m => m.SendException(It.IsAny<RollbarLevel>(), It.IsAny<Exception>())).Returns(() => Task.FromResult<Payloads.Response>(null));
-            this.RollbarMock.Setup(m => m.SendMessage(It.IsAny<RollbarLevel>(), It.IsAny<string>())).Returns(() => Task.FromResult<Payloads.Response>(null));
-            this.Logger = new RollbarDotNetLogger(this.RollbarMock.Object);
+            RollbarMock = new Mock<Rollbar>(null, null, null);
+            RollbarMock.Setup(m => m.SendException(It.IsAny<RollbarLevel>(), It.IsAny<Exception>())).Returns(() => Task.FromResult<Payloads.Response>(null));
+            RollbarMock.Setup(m => m.SendMessage(It.IsAny<RollbarLevel>(), It.IsAny<string>())).Returns(() => Task.FromResult<Payloads.Response>(null));
+            Logger = new RollbarDotNetLogger(RollbarMock.Object);
         }
 
         protected Mock<Rollbar> RollbarMock { get; set; }
@@ -36,20 +36,20 @@ namespace RollbarDotNet.Tests.Logger
         [InlineData(LogLevel.None, false)]
         public void IsEnabled_Correctly(LogLevel logLevel, bool isEnabled)
         {
-            Assert.Equal(isEnabled, this.Logger.IsEnabled(logLevel));
+            Assert.Equal(isEnabled, Logger.IsEnabled(logLevel));
         }
 
         [Fact]
         public void BeginScope_ReturnsNull()
         {
-            Assert.Null(this.Logger.BeginScope(null));
+            Assert.Null(Logger.BeginScope(null));
         }
 
         [Theory]
         [MemberData(nameof(Logs))]
         public void Log_SendsExceptionIfPassed(LogLevel logLevel, RollbarLevel rollbarLevel, Exception ex, bool shouldSendException, bool shouldSendMessage)
         {
-            this.Logger.Log(logLevel, 0, (string)null, ex, (s, e) => string.Empty);
+            Logger.Log(logLevel, 0, (string)null, ex, (s, e) => string.Empty);
             RollbarMock.Verify(r => r.SendException(rollbarLevel, ex), Times.Exactly(shouldSendException ? 1 : 0));
             RollbarMock.Verify(r => r.SendMessage(rollbarLevel, It.IsAny<string>()), Times.Exactly(shouldSendMessage ? 1 : 0));
         }

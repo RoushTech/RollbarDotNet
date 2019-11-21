@@ -13,7 +13,7 @@
 
         public Payload()
         {
-            this.Data = new Data();
+            Data = new Data();
         }
     }
 }

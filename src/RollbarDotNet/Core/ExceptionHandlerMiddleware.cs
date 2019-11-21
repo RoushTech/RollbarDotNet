@@ -11,14 +11,14 @@
         public ExceptionHandlerMiddleware(
             RequestDelegate next)
         {
-            this.Next = next;
+            Next = next;
         }
 
         public async Task Invoke(HttpContext context, Rollbar rollbar)
         {
             try
             {
-                await this.Next(context);
+                await Next(context);
             }
             catch (Exception exception)
             {

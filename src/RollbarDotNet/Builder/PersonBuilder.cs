@@ -10,18 +10,18 @@
 
         public PersonBuilder(IHttpContextAccessor contextAccessor)
         {
-            this.ContextAccessor = contextAccessor;
+            ContextAccessor = contextAccessor;
         }
 
         public void Execute(Payload payload)
         {
             payload.Data.Person = new Person();
-            this.BuildPerson(payload.Data.Person);
+            BuildPerson(payload.Data.Person);
         }
 
         private void BuildPerson(Person person)
         {
-            var principal = this.ContextAccessor.HttpContext?.User;
+            var principal = ContextAccessor.HttpContext?.User;
             if (principal == null)
             {
                 return;

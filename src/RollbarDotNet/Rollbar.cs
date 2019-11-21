@@ -18,52 +18,52 @@
             IEnumerable<IExceptionBuilder> exceptionBuilders,
             RollbarClient rollbarClient)
         {
-            this.Builders = builders;
-            this.ExceptionBuilders = exceptionBuilders;
-            this.RollbarClient = rollbarClient;
+            Builders = builders;
+            ExceptionBuilders = exceptionBuilders;
+            RollbarClient = rollbarClient;
         }
 
 
         public virtual async Task<Response> SendException(Exception exception)
         {
-            return await this.SendException(RollbarLevel.Error, exception);
+            return await SendException(RollbarLevel.Error, exception);
         }
 
         public virtual async Task<Response> SendException(RollbarLevel level, Exception exception)
         {
-            var payload = this.SetupPayload(level);
-            foreach (var exceptionBuilder in this.ExceptionBuilders)
+            var payload = SetupPayload(level);
+            foreach (var exceptionBuilder in ExceptionBuilders)
             {
                 exceptionBuilder.Execute(payload, exception);
             }
 
-            return await this.RollbarClient.Send(payload);
+            return await RollbarClient.Send(payload);
         }
 
         public virtual async Task<Response> SendMessage(string message)
         {
-            return await this.SendMessage(RollbarLevel.Info, message);
+            return await SendMessage(RollbarLevel.Info, message);
         }
 
         public virtual async Task<Response> SendMessage(RollbarLevel level, string message)
         {
-            var payload = this.SetupPayload(level);
+            var payload = SetupPayload(level);
             payload.Data.Body.Message = new Message();
             payload.Data.Body.Message.Body = message;
-            return await this.RollbarClient.Send(payload);
+            return await RollbarClient.Send(payload);
         }
 
         protected Payload SetupPayload(RollbarLevel level)
         {
             var payload = new Payload();
-            payload.Data.Level = this.LevelToString(level);
-            this.ExecuteBuilders(payload);
+            payload.Data.Level = LevelToString(level);
+            ExecuteBuilders(payload);
             return payload;
         }
 
         protected void ExecuteBuilders(Payload payload)
         {
-            foreach (var builder in this.Builders)
+            foreach (var builder in Builders)
             {
                 builder.Execute(payload);
             }

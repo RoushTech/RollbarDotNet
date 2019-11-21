@@ -15,19 +15,19 @@
 
         public RollbarDotNetLoggerProvider(IServiceProvider serviceProvider)
         {
-            this.Loggers = new ConcurrentDictionary<string, RollbarDotNetLogger>();
-            this.ServiceProvider = serviceProvider;
+            Loggers = new ConcurrentDictionary<string, RollbarDotNetLogger>();
+            ServiceProvider = serviceProvider;
         }
 
         public void Dispose()
         {
-            this.Loggers.Clear();
+            Loggers.Clear();
         }
 
         public ILogger CreateLogger(string categoryName)
         {
-            var rollbar = this.ServiceProvider.GetRequiredService<Rollbar>();
-            return this.Loggers.GetOrAdd(categoryName, name => new RollbarDotNetLogger(rollbar));
+            var rollbar = ServiceProvider.GetRequiredService<Rollbar>();
+            return Loggers.GetOrAdd(categoryName, name => new RollbarDotNetLogger(rollbar));
         }
     }
 }

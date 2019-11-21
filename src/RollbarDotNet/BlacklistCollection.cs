@@ -10,12 +10,12 @@
 
         public BlacklistCollection(IEnumerable<IBlacklister> blacklisters)
         {
-            this.Blacklisters = blacklisters.ToList();
+            Blacklisters = blacklisters.ToList();
         }
 
         public bool Check(string name)
         {
-            return this.Blacklisters.Any(b => b.Check(name));
+            return Blacklisters.Any(b => b.Check(name));
         }
     }
 }
