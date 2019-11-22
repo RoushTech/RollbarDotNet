@@ -22,7 +22,7 @@
             var rollbarLogLevel = MapLogLevel(logLevel);
             if (exception != null)
             {
-                Rollbar.SendException(rollbarLogLevel, exception).Wait();
+                Rollbar.SendException(rollbarLogLevel, exception, formatter(state, exception)).Wait();
                 return;
             }
 
