@@ -23,13 +23,16 @@
             RollbarClient = rollbarClient;
         }
 
+        public virtual Task<Response> SendException(Exception exception) => SendException(exception, null);
 
-        public virtual async Task<Response> SendException(Exception exception, string message = null)
+        public virtual async Task<Response> SendException(Exception exception, string message)
         {
             return await SendException(RollbarLevel.Error, exception, message);
         }
 
-        public virtual async Task<Response> SendException(RollbarLevel level, Exception exception, string message = null)
+        public virtual Task<Response> SendException(RollbarLevel level, Exception exception) => SendException(level, exception);
+
+        public virtual async Task<Response> SendException(RollbarLevel level, Exception exception, string message)
         {
             var payload = SetupPayload(level);
             foreach (var exceptionBuilder in ExceptionBuilders)

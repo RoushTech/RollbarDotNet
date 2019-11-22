@@ -28,9 +28,9 @@
             _sut.Execute(_payload);
 
             var person = _payload.Data.Person;
-            Assert.Equal(true, string.IsNullOrEmpty(person.Id));
-            Assert.Equal(true, string.IsNullOrEmpty(person.Email));
-            Assert.Equal(true, string.IsNullOrEmpty(person.Username));
+            Assert.True(string.IsNullOrEmpty(person.Id));
+            Assert.True(string.IsNullOrEmpty(person.Email));
+            Assert.True(string.IsNullOrEmpty(person.Username));
         }
 
         [Fact]
@@ -86,7 +86,7 @@
             _sut.Execute(_payload);
 
             var person = _payload.Data.Person;
-            Assert.Equal(true, string.IsNullOrEmpty(person.Email));
+            Assert.True(string.IsNullOrEmpty(person.Email));
         }
 
         [Fact]
@@ -98,7 +98,7 @@
             _sut.Execute(_payload);
 
             var person = _payload.Data.Person;
-            Assert.Equal(true, string.IsNullOrEmpty(person.Id));
+            Assert.True(string.IsNullOrEmpty(person.Id));
         }
     }
 }

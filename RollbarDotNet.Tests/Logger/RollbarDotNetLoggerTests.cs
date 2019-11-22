@@ -3,12 +3,7 @@ namespace RollbarDotNet.Tests.Logger
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Configuration;
-    using Core;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
     using Moq;
     using RollbarDotNet.Logger;
     using Xunit;
