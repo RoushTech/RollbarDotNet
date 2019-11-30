@@ -45,26 +45,26 @@ namespace RollbarDotNet.Tests.Logger
         public void Log_SendsExceptionIfPassed(LogLevel logLevel, RollbarLevel rollbarLevel, Exception ex, bool shouldSendException, bool shouldSendMessage)
         {
             Logger.Log(logLevel, 0, (string)null, ex, (s, e) => string.Empty);
-            RollbarMock.Verify(r => r.SendException(rollbarLevel, ex), Times.Exactly(shouldSendException ? 1 : 0));
+            RollbarMock.Verify(r => r.SendException(rollbarLevel, ex, It.IsAny<string>()), Times.Exactly(shouldSendException ? 1 : 0));
             RollbarMock.Verify(r => r.SendMessage(rollbarLevel, It.IsAny<string>()), Times.Exactly(shouldSendMessage ? 1 : 0));
         }
 
         public static IEnumerable<object[]> Logs()
         {
             yield return new object[] { LogLevel.Critical, RollbarLevel.Critical, new Exception(), true, false };
-            yield return new object[] { LogLevel.Critical, RollbarLevel.Critical, (Exception)null, false, true };
+            yield return new object[] { LogLevel.Critical, RollbarLevel.Critical, null, false, true };
             yield return new object[] { LogLevel.Error, RollbarLevel.Error, new Exception(), true, false };
-            yield return new object[] { LogLevel.Error, RollbarLevel.Error, (Exception)null, false, true };
+            yield return new object[] { LogLevel.Error, RollbarLevel.Error, null, false, true };
             yield return new object[] { LogLevel.Warning, RollbarLevel.Warning, new Exception(), true, false };
-            yield return new object[] { LogLevel.Warning, RollbarLevel.Warning, (Exception)null, false, true };
+            yield return new object[] { LogLevel.Warning, RollbarLevel.Warning, null, false, true };
             yield return new object[] { LogLevel.Information, RollbarLevel.Info, new Exception(), true, false };
-            yield return new object[] { LogLevel.Information, RollbarLevel.Info, (Exception)null, false, true };
+            yield return new object[] { LogLevel.Information, RollbarLevel.Info, null, false, true };
             yield return new object[] { LogLevel.Debug, RollbarLevel.Debug, new Exception(), true, false };
-            yield return new object[] { LogLevel.Debug, RollbarLevel.Debug, (Exception)null, false, true };
+            yield return new object[] { LogLevel.Debug, RollbarLevel.Debug, null, false, true };
             yield return new object[] { LogLevel.Trace, RollbarLevel.Debug, new Exception(), true, false };
-            yield return new object[] { LogLevel.Trace, RollbarLevel.Debug, (Exception)null, false, true };
+            yield return new object[] { LogLevel.Trace, RollbarLevel.Debug, null, false, true };
             yield return new object[] { LogLevel.None, RollbarLevel.Debug, new Exception(), false, false };
-            yield return new object[] { LogLevel.None, RollbarLevel.Debug, (Exception)null, false, false };
+            yield return new object[] { LogLevel.None, RollbarLevel.Debug, null, false, false };
         }
     }
 }
