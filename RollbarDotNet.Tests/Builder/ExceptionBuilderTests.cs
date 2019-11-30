@@ -97,7 +97,7 @@
                 Assert.True(payload?.Frames?.Count == 2);
                 var frame = payload?.Frames?.FirstOrDefault();
                 Assert.Equal(
-                    "RollbarDotNet.Tests.Builder.ExceptionBuilderTests.ThrowException(System.String a, System.Int32 b)",
+                    "RollbarDotNet.Tests.Builder.ExceptionBuilderTests.ThrowException(System.String _1, System.Int32 _2)",
                     frame?.Method);
                 var stackTrace = new StackTrace(exception, true);
                 var stackTraceFrame = stackTrace.GetFrames().FirstOrDefault();
