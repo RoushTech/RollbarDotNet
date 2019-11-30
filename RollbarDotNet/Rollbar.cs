@@ -40,7 +40,10 @@
                 exceptionBuilder.Execute(payload, exception);
             }
 
-            payload.Data.Body.Message.Body = message;
+            payload.Data.Body.Message = new Message
+            {
+                Body = message
+            };
             return await RollbarClient.Send(payload);
         }
 
@@ -52,8 +55,10 @@
         public virtual async Task<Response> SendMessage(RollbarLevel level, string message)
         {
             var payload = SetupPayload(level);
-            payload.Data.Body.Message = new Message();
-            payload.Data.Body.Message.Body = message;
+            payload.Data.Body.Message = new Message
+            {
+                Body = message
+            };
             return await RollbarClient.Send(payload);
         }
 
