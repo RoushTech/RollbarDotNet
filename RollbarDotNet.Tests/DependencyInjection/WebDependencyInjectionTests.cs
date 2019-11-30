@@ -66,8 +66,10 @@
             Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
         }
 
-        [Fact]
-        public async Task SucessfullyReportError()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("Test Message For Exception")]
+        public async Task SuccessfullyReportError(string message)
         {
             try
             {
@@ -82,7 +84,7 @@
             }
             catch (Exception exception)
             {
-                var response = await Rollbar.SendException(exception);
+                var response = await Rollbar.SendException(exception, message);
                 Assert.False(string.IsNullOrEmpty(response.Result.Uuid));
             }
         }

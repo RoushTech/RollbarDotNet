@@ -82,9 +82,11 @@
 
         protected Payloads.Exception BuildException(Exception exception)
         {
-            var payloadException = new Payloads.Exception();
-            payloadException.Class = exception.GetType().Name;
-            payloadException.Message = exception.Message;
+            var payloadException = new Payloads.Exception
+            {
+                Class = exception.GetType().Name,
+                Message = exception.Message
+            };
             return payloadException;
         }
     }

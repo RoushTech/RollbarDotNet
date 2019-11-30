@@ -7,7 +7,7 @@
     public class Client
     {
         [JsonProperty("keys")]
-        private Dictionary<string, object> Keys { get; set; }
+        public Dictionary<string, object> Keys { get; set; }
 
         public Client()
         {

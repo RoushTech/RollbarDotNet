@@ -20,7 +20,7 @@
 
         protected Payload Payload { get; set; }
 
-        protected void ThrowException(string a, int b)
+        protected void ThrowException(string _1, int _2)
         {
             throw new Exception("test exception");
         }

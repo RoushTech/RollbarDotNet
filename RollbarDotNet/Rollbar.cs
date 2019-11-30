@@ -40,10 +40,7 @@
                 exceptionBuilder.Execute(payload, exception);
             }
 
-            payload.Data.Body.Message = new Message
-            {
-                Body = message
-            };
+            payload.Data.Title = message;
             return await RollbarClient.Send(payload);
         }
 

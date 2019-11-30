@@ -13,7 +13,7 @@
             var blacklisterMock = new Mock<IBlacklister>();
             blacklisterMock.Setup(b => b.Check("test")).Returns(true);
             var blacklistCollection = new BlacklistCollection(new List<IBlacklister> { blacklisterMock.Object });
-            Assert.Equal(true, blacklistCollection.Check("test"));
+            Assert.True(blacklistCollection.Check("test"));
         }
 
         [Fact]
@@ -22,7 +22,7 @@
             var blacklisterMock = new Mock<IBlacklister>();
             blacklisterMock.Setup(b => b.Check("test")).Returns(true);
             var blacklistCollection = new BlacklistCollection(new List<IBlacklister> { blacklisterMock.Object });
-            Assert.Equal(false, blacklistCollection.Check("testa"));
+            Assert.False(blacklistCollection.Check("testa"));
         }
     }
 }
