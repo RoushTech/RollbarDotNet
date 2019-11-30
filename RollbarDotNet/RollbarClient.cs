@@ -23,7 +23,7 @@
             RollbarOptions = rollbarOptions.Value;
         }
 
-        public async Task<Response> Send(Payload payload)
+        public virtual async Task<Response> Send(Payload payload)
         {
             if (RollbarOptions.Disabled)
             {

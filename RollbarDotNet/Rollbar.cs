@@ -14,6 +14,8 @@
 
         protected RollbarClient RollbarClient { get; }
 
+        protected Dictionary<Exception, Response> SentExceptions { get; } = new Dictionary<Exception, Response>();
+
         public Rollbar(IEnumerable<IBuilder> builders,
             IEnumerable<IExceptionBuilder> exceptionBuilders,
             RollbarClient rollbarClient)
@@ -34,6 +36,11 @@
 
         public virtual async Task<Response> SendException(RollbarLevel level, Exception exception, string message)
         {
+            if (SentExceptions.ContainsKey(exception))
+            {
+                return SentExceptions[exception];
+            }
+
             var payload = SetupPayload(level);
             foreach (var exceptionBuilder in ExceptionBuilders)
             {
@@ -41,7 +48,9 @@
             }
 
             payload.Data.Title = message;
-            return await RollbarClient.Send(payload);
+            var response = await RollbarClient.Send(payload);
+            SentExceptions.Add(exception, response);
+            return response;
         }
 
         public virtual async Task<Response> SendMessage(string message)
