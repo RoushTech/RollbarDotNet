@@ -54,9 +54,18 @@ Configure Rollbar from your appSettings.json file like so:
 ``` javascript
   "Rollbar": {
     "AccessToken": "[access token here]",
-    "Environment": "[named environment here]"
+    "Environment": "[named environment here]",
+    "Disabled": false
   }
 ```
+
+If you want to use the ILogger implementation add this:
+
+``` csharp
+    loggerFactory.AddRollbarDotNetLogger(app.ApplicationServices);
+```
+
+In your `Configure()` method inside of `Startup.cs`
 
 ## Getting Occurrence UUIDs
 
@@ -146,18 +155,6 @@ Additional Blacklists can be coded by inheriting from the RollbarDotNet.Blacklis
 
 ## To do
 
-### Implement stack frames
-
-As of writing this .NET Core does not support walking the stack frames of the exception, means our error messages are pretty weak.
-
-### Log4net support
-
-As far as I know log4net is _currently_ implementing .NET Core support.
-
 ### Break out into separate libraries
 
 .NET Core is all about keeping things slim, do we put ASPNETCore code in a different lib?
-
-### .NET 4.5.1 support
-
-Would be nice for this to support .NET 4.5.1, no testing and no real effort outside of some basic preprocessor stuff in place.
