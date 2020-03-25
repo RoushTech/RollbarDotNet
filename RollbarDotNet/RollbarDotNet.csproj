@@ -10,7 +10,7 @@
     <PackageId>RollbarDotNet</PackageId>
     <PackageTags>Rollbar;dotnet;Core;Error</PackageTags>
     <PackageProjectUrl>https://github.com/RoushTech/RollbarDotNet</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/RoushTech/RollbarDotNet/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
