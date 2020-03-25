@@ -42,7 +42,7 @@
 
 <sup>Released: 2017/8/20</sup>
 
-###### Features
+### Features
 
 - Upgrade to VS2017/CSProj.
 - Add trace frame support.
@@ -52,12 +52,12 @@
 
 <sup>Released: 2017/4/21</sup>
 
-###### Features
+### Features
 
 - Updated documentation. ##49
 - Can now disable Rollbar from configuration. ##48
 
-###### Bug Fixes
+### Bug Fixes
 
 - Fix issue with trying to access Request.Form variables during POSTs that may not actually support form variables. ##54
 
@@ -65,11 +65,11 @@
 
 <sup>Released: 2017/3/10</sup>
 
-###### Features
+### Features
 
 - More robust testing of sending exceptions to Rollbar (see readme.md for instructions on configuring token for testing).
 
-###### Bug Fixes
+### Bug Fixes
 
 - Fixed issue sending Rollbar exceptions.
 
@@ -77,7 +77,7 @@
 
 <sup>Released: 2017/2/26</sup>
 
-###### Features
+### Features
 
 - IHttpContextAccessor is no longer assumed to be included as part of `AddIdentity()`, we'll add it.
 - Testing of dependency injection for web platforms (console apps coming soon).
@@ -86,7 +86,7 @@
 - Person record support (thank you mkdabrowski).
 - Exception builder is now injectable.
 
-###### Bug Fixes
+### Bug Fixes
 
 - Sending a message to Rollbar no longer results in a null reference exception being thrown.
 
@@ -94,7 +94,7 @@
 
 <sup>Released: 2016/9/30</sup>
 
-###### Features
+### Features
 
 - Upgrade for .NET Core 1.0 release.
 
@@ -102,7 +102,7 @@
 
 <sup>Released: 2016/6/12</sup>
 
-###### Features
+### Features
 
 - Added support for cookies on request body.
 - Added blacklisting variables by name.
@@ -111,7 +111,7 @@
 
 <sup>Released: 2016/6/9</sup>
 
-###### Features
+### Features
 
 - Rollbar message UUID available after error is reported.
 - Removed custom parameters from message body.
@@ -123,6 +123,6 @@
 
 Initial release.
 
-###### Features
+### Features
 
 - Ability to send basic logs to Rollbar
