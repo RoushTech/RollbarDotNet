@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/test/RollbarDotNet.Tests/RollbarDotNet.Tests.csproj"
+                "${workspaceFolder}/RollbarDotNet.Tests/RollbarDotNet.Tests.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
