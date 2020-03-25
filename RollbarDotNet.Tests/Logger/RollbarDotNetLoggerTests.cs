@@ -5,6 +5,7 @@ namespace RollbarDotNet.Tests.Logger
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Hosting.Server;
+    using Microsoft.AspNetCore.Server.Kestrel.Core;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Moq;
@@ -45,14 +46,14 @@ namespace RollbarDotNet.Tests.Logger
         }
 
         [Fact]
-        public void CanAddRollbarDotNetLogger()
+        public async Task CanAddRollbarDotNetLogger()
         {
-            new WebHostBuilder()
+            var webHost = new WebHostBuilder()
                 .UseDefaultServiceProvider(options =>
                 {
                     options.ValidateScopes = true;
                 })
-                .UseServer(Mock.Of<IServer>())
+                .UseKestrel()
                 .ConfigureServices(services =>
                 {
                     services.AddLogging().AddRollbar();
@@ -64,8 +65,9 @@ namespace RollbarDotNet.Tests.Logger
                         .GetRequiredService<ILoggerFactory>();
                     loggerFactory.AddRollbarDotNetLogger(app.ApplicationServices);
                 })
-                .Build()
-                .Run();
+                .Build();
+            await webHost.StartAsync();
+            await webHost.StopAsync();
         }
 
         [Theory]

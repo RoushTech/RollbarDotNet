@@ -21,7 +21,7 @@
                 .AddSingleton<IBlacklistCollection, BlacklistCollection>()
                 .AddSingleton<IExceptionBuilder, ExceptionBuilder>()
                 .AddSingleton<RollbarClient>()
-                .AddScoped<Rollbar>();
+                .AddSingleton<Rollbar>();
         }
 
         public static IServiceCollection AddRollbarWeb(this IServiceCollection services)
