@@ -3,8 +3,11 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Builder;
+    using DotNext.Runtime.Caching;
     using Payloads;
     using Exception = System.Exception;
+
+#nullable enable
 
     public class Rollbar
     {
@@ -14,7 +17,7 @@
 
         protected RollbarClient RollbarClient { get; }
 
-        protected Dictionary<Exception, Response> SentExceptions { get; } = new Dictionary<Exception, Response>();
+        protected ConcurrentCache<Exception, Response> SentExceptions { get; } = new ConcurrentCache<Exception, Response>(100, CacheEvictionPolicy.LRU);
 
         public Rollbar(IEnumerable<IBuilder> builders,
             IEnumerable<IExceptionBuilder> exceptionBuilders,
@@ -27,18 +30,18 @@
 
         public virtual Task<Response> SendException(Exception exception) => SendException(exception, null);
 
-        public virtual async Task<Response> SendException(Exception exception, string message)
+        public virtual async Task<Response> SendException(Exception exception, string? message)
         {
             return await SendException(RollbarLevel.Error, exception, message);
         }
 
-        public virtual Task<Response> SendException(RollbarLevel level, Exception exception) => SendException(level, exception);
+        public virtual Task<Response> SendException(RollbarLevel level, Exception exception) => SendException(level, exception, null);
 
-        public virtual async Task<Response> SendException(RollbarLevel level, Exception exception, string message)
+        public virtual async Task<Response> SendException(RollbarLevel level, Exception exception, string? message)
         {
-            if (SentExceptions.ContainsKey(exception))
+            if (SentExceptions.TryGetValue(exception, out var cached))
             {
-                return SentExceptions[exception];
+                return cached;
             }
 
             var payload = SetupPayload(level);
@@ -49,7 +52,7 @@
 
             payload.Data.Title = message;
             var response = await RollbarClient.Send(payload);
-            SentExceptions.Add(exception, response);
+            SentExceptions[exception] = response;
             return response;
         }
 
@@ -84,7 +87,7 @@
             }
         }
 
-        protected string LevelToString(RollbarLevel level)
+        protected static string LevelToString(RollbarLevel level)
         {
             return level.ToString().ToLower();
         }
