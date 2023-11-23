@@ -12,6 +12,7 @@
         public static IServiceCollection AddRollbar(this IServiceCollection services)
         {
             return services
+                .AddHttpClient()
                 .AddSingleton<IBuilder, ConfigurationBuilder>()
                 .AddSingleton<IBuilder, EnvironmentBuilder>()
                 .AddSingleton<IBuilder, NotifierBuilder>()

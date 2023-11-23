@@ -17,10 +17,13 @@
 
         protected Uri RollbarUri => new Uri("https://api.rollbar.com/api/1/item/");
 
-        public RollbarClient(IOptions<RollbarOptions> rollbarOptions)
+        protected IHttpClientFactory HttpClientFactory { get; }
+
+        public RollbarClient(IOptions<RollbarOptions> rollbarOptions, IHttpClientFactory httpClientFactory)
         {
             Configuration = new Configuration.Configuration();
             RollbarOptions = rollbarOptions.Value;
+            HttpClientFactory = httpClientFactory;
         }
 
         public virtual async Task<Response> Send(Payload payload)
@@ -37,7 +40,7 @@
             }
 
             var json = Serialize(payload);
-            using (var httpClient = new HttpClient())
+            using (var httpClient = HttpClientFactory.CreateClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
